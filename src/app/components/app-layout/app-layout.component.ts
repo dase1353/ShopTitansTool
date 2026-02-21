@@ -25,7 +25,7 @@ import { TalentService } from '../../services/talent.service';
       <!-- Global Sidebar -->
       <aside class="sidebar tools-menu glass-panel" [class.open]="isSidebarOpen">
         <div class="sidebar-brand">
-          <div class="banner-logo"></div>
+          <div class="banner-logo" [style.backgroundImage]="'url(ShopTitansAssets/Logos/ShopTitans_Logo_RGB.png)'"></div>
         </div>
 
         <nav class="nav-links">
@@ -95,7 +95,6 @@ import { TalentService } from '../../services/talent.service';
     .banner-logo {
       width: 70px;
       height: 48px;
-      background-image: url('ShopTitansAssets/Logos/ShopTitans_Logo_RGB.png');
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
