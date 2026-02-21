@@ -6,7 +6,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "sample": {
+    "shop-titans-tool": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -56,10 +56,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "sample:build:production"
+              "buildTarget": "shop-titans-tool:build:production"
             },
             "development": {
-              "buildTarget": "sample:build:development"
+              "buildTarget": "shop-titans-tool:build:development"
             }
           },
           "defaultConfiguration": "development"
