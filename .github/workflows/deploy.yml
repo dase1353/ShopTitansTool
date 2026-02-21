@@ -31,13 +31,12 @@ jobs:
         run: npm ci
 
       - name: Build Project
-        # Remember to replace --base-href with your actual repository name
-        run: npm run build -- --base-href /ShopTitansTool/
+        run: npm run build -- --base-href=/ShopTitansTool/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './dist/shop-titans-tool/browser'
+          path: 'dist/shop-titans-tool/browser/'
 
   deploy:
     environment:
