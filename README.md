@@ -1,43 +1,39 @@
-# Shop Titans Tool
+# Shop Titans Tool (傳奇商店工具箱)
 
-A comprehensive management and planning tool designed for the popular game **Shop Titans**.
+一個為 **Shop Titans (傳奇商店)** 玩家設計的綜合性規劃與管理工具，旨在優化您的遊戲體驗與天賦配點策略。
 
-## Features
+## 🌟 主要功能
 
-- **Interactive Talent Tree**: Navigate and explore skills through a premium, dynamically-rendered UI tree with glassmorphism and starry grid backgrounds.
-- **Skills Manager**: Efficiently manage and update skills, capabilities, and dependencies.
-- **Rent Manager**: Track and calculate resource investments seamlessly.
-- **CI/CD Integrated**: Automated deployments and tests via GitHub Actions.
+- **互動式天賦樹規劃器 (Talent Tree Planner)**:
+  - 包含 **交易 (Trading)**、**任務 (Questing)** 與 **製作 (Crafting)** 三大完整天賦路徑。
+  - 採用高品質遊戲原創圖標與視覺設計，提供沉浸式的操作體驗。
+  - **自動點數計算**：即時追蹤剩餘點數，自動處理前置技能點數需求驗證。
+  - **前置依賴檢查**：防止不符合點數要求的非法點法，並自動高亮可點選的技能。
+- **高階管理功能**:
+  - **存檔/讀取個人檔案**：將您的不同流派配點（Builds）儲存在本地瀏覽器中。
+  - **分享連結 (Export/Import)**：透過生成的 Base64 網址，將您的配點直接分享給其他玩家。
+  - **內建天賦編輯器**：支援自定義天賦節點、位置與數值（開發者模式）。
+- **現代化介面設計**:
+  - **質感黑金風格**：搭配玻璃擬態 (Glassmorphism) 與星塵動態背景。
+  - **流暢微動效**：互動式的 SVG 連線與發光效果。
+  - **成就同步設定**：一鍵開啟「成就加成」以獲得額外的 5 點天賦點。
 
-## Tech Stack
+## 🛠️ 技術棧
 
-- **Framework**: Angular 17+
-- **Styling**: Vanilla CSS with modern aesthetics (Dark theme, Glassmorphism, CSS Variables)
+- **框架**: Angular 21 (使用最新 Signals 響應式引擎)
+- **樣式**: Vanilla CSS + TailwindCSS 4 (高效、可控且精緻的視覺設計)
+- **部署**: GitHub Pages (自動化 CI/CD 流程)
 
-## Development
+## 🚀 快速開始
 
-To start a local development server, run:
+1.  **訪問線上版本**：[Shop Titans Tool](https://dase1353.github.io/ShopTitansTool/)
+2.  **本地開發**：
+    ```bash
+    npm install
+    ng serve
+    ```
+    造訪 `http://localhost:4200/` 開始開發。
 
-```bash
-ng serve
-```
+## 📝 備註
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`.
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory.
-
-## Testing
-
-To execute unit tests, use:
-
-```bash
-ng test
-```
+本專案之資源（圖標、名稱）版權歸 Kabam Games, Inc. 所有。本工具僅供玩家交流及學習研究使用。
