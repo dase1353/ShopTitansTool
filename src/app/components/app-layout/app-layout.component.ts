@@ -95,7 +95,7 @@ import { TalentService } from '../../services/talent.service';
     .banner-logo {
       width: 70px;
       height: 48px;
-      background-image: url('/ShopTitansAssets/Logos/ShopTitans_Logo_RGB.png');
+      background-image: url('ShopTitansAssets/Logos/ShopTitans_Logo_RGB.png');
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
