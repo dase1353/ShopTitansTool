@@ -26,7 +26,7 @@
 
 ## 🚀 快速開始
 
-1.  **訪問線上版本**：[Shop Titans Tool](https://dase1353.github.io/ShopTitansTool/)
+1.  **訪問線上版本**：[Shop Titans Tool](https://dase1353.github.io/ShopTitansTool/#/talent)
 2.  **本地開發**：
     ```bash
     npm install
