@@ -50,6 +50,7 @@ import { TalentTree, TalentNode } from '../../models/talent.model';
             [class.dragging]="draggingNodeId === node.id"
             [isLocked]="isLocked(node)"
             (mousedown)="onNodeMouseDown($event, node.id)"
+            (touchstart)="onNodeTouchStart($event, node.id)"
             (onSelect)="levelUp(node.id)"
             (onRightClick)="levelDown(node.id)"
           />
@@ -66,6 +67,7 @@ import { TalentTree, TalentNode } from '../../models/talent.model';
       overflow: hidden; /* Changed to hidden to manual pan */
       position: relative;
       cursor: grab; /* Shows grabbable cursor for map panning */
+      touch-action: none;
     }
     
     .tree-viewport:active {
@@ -245,6 +247,20 @@ export class TalentTreeComponent implements OnInit, OnDestroy {
     event.preventDefault(); // Prevent text selection
   }
 
+  onNodeTouchStart(event: TouchEvent, nodeId: string) {
+    if (!this.isEditMode()) return;
+    this.draggingNodeId = nodeId;
+    this.talentService.editingNodeId.set(nodeId);
+    this.dragStartX = event.touches[0].clientX;
+    this.dragStartY = event.touches[0].clientY;
+
+    const node = this.tree().nodes.find(n => n.id === nodeId);
+    if (node) {
+      this.initialNodeX = node.position.x;
+      this.initialNodeY = node.position.y;
+    }
+  }
+
   @HostListener('window:mousemove', ['$event'])
   onMouseMove(event: MouseEvent) {
     if (this.draggingNodeId && this.isEditMode()) {
@@ -278,6 +294,44 @@ export class TalentTreeComponent implements OnInit, OnDestroy {
     this.isMapPanning = false;
   }
 
+  @HostListener('window:touchmove', ['$event'])
+  onTouchMove(event: TouchEvent) {
+    if (this.draggingNodeId && this.isEditMode()) {
+      const node = this.tree().nodes.find(n => n.id === this.draggingNodeId);
+      if (node) {
+        // Calculate total movement correctly handling the tree orientation
+        const touch = event.touches[0];
+        const dx = touch.clientX - this.dragStartX;
+        const dy = touch.clientY - this.dragStartY;
+
+        const newX = this.isVertical() ? this.initialNodeX + dx : this.initialNodeX + dy;
+        const newY = this.isVertical() ? this.initialNodeY + dy : this.initialNodeY + dx;
+
+        this.talentService.updateNode(this.tree().type, {
+          ...node,
+          position: { x: newX, y: newY }
+        });
+      }
+      event.preventDefault();
+    } else if (this.isMapPanning) {
+      const touch = event.touches[0];
+      const dx = touch.clientX - this.panStartX;
+      const dy = touch.clientY - this.panStartY;
+      this.panX.update(v => v + dx);
+      this.panY.update(v => v + dy);
+      this.panStartX = touch.clientX;
+      this.panStartY = touch.clientY;
+      event.preventDefault();
+    }
+  }
+
+  @HostListener('window:touchend')
+  @HostListener('window:touchcancel')
+  onTouchEnd() {
+    this.draggingNodeId = null;
+    this.isMapPanning = false;
+  }
+
   // Handle map panning
   @HostListener('mousedown', ['$event'])
   onMapMouseDown(event: MouseEvent) {
@@ -289,6 +343,17 @@ export class TalentTreeComponent implements OnInit, OnDestroy {
       this.panStartY = event.clientY;
       // Prevent default to avoid text selection cursor while panning
       event.preventDefault();
+    }
+  }
+
+  @HostListener('touchstart', ['$event'])
+  onMapTouchStart(event: TouchEvent) {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.talent-node')) {
+      this.isMapPanning = true;
+      this.panStartX = event.touches[0].clientX;
+      this.panStartY = event.touches[0].clientY;
+      // touch-action: none on .tree-viewport handles prevent default for native scrolling
     }
   }
 

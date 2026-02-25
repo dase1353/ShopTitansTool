@@ -21,6 +21,10 @@ import { TalentNode } from '../../models/talent.model';
         [class.special]="node().isSpecial"
         (click)="handleClick()" 
         (contextmenu)="handleRightClick($event)"
+        (touchstart)="handleTouchStart($event)"
+        (touchend)="handleTouchEnd($event)"
+        (touchcancel)="handleTouchCancel($event)"
+        (touchmove)="handleTouchMove($event)"
         [class.locked]="isLocked()" 
         [class.maxed]="isMaxed()"
       >
@@ -57,6 +61,8 @@ import { TalentNode } from '../../models/talent.model';
       align-items: center;
       cursor: pointer;
       user-select: none;
+      touch-action: none;
+      -webkit-touch-callout: none;
       transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
@@ -280,7 +286,64 @@ export class TalentNodeComponent {
     return this.node().maxLevel > 0 && this.node().level >= this.node().maxLevel;
   });
 
-  handleClick() {
+  private longPressTimeout: any;
+  private isLongPressTriggered = false;
+  private touchStartY = 0;
+  private touchStartX = 0;
+
+  handleTouchStart(event: TouchEvent) {
+    if (this.isLocked() && !this.isMaxed() && this.node().level === 0) {
+      // If completely locked, we might still want to allow long press just to be safe,
+      // but typically locked nodes can't be leveled down. Let's allow it so the logic is uniform.
+    }
+
+    // Store initial touch position to detect scrolling
+    this.touchStartX = event.touches[0].clientX;
+    this.touchStartY = event.touches[0].clientY;
+    this.isLongPressTriggered = false;
+
+    this.longPressTimeout = setTimeout(() => {
+      this.isLongPressTriggered = true;
+      this.onRightClick.emit();
+      if (typeof navigator !== 'undefined' && navigator.vibrate) {
+        navigator.vibrate(50);
+      }
+    }, 450); // 450ms for long press
+  }
+
+  handleTouchMove(event: TouchEvent) {
+    if (!this.longPressTimeout) return;
+
+    // If the user moves their finger significantly, cancel the long press
+    const dx = Math.abs(event.touches[0].clientX - this.touchStartX);
+    const dy = Math.abs(event.touches[0].clientY - this.touchStartY);
+    if (dx > 10 || dy > 10) {
+      clearTimeout(this.longPressTimeout);
+      this.longPressTimeout = null;
+    }
+  }
+
+  handleTouchEnd(event: TouchEvent) {
+    if (this.longPressTimeout) {
+      clearTimeout(this.longPressTimeout);
+      this.longPressTimeout = null;
+    }
+    if (this.isLongPressTriggered) {
+      event.preventDefault(); // Stop native click
+    }
+  }
+
+  handleTouchCancel(event: TouchEvent) {
+    if (this.longPressTimeout) {
+      clearTimeout(this.longPressTimeout);
+      this.longPressTimeout = null;
+    }
+  }
+
+  handleClick(event?: MouseEvent) {
+    if (this.isLongPressTriggered) {
+      return; // Handled by long press
+    }
     if (!this.isLocked()) {
       this.onSelect.emit();
     }
@@ -288,8 +351,6 @@ export class TalentNodeComponent {
 
   handleRightClick(event: Event) {
     event.preventDefault(); // Prevent native context menu
-    // We allow right-clicking even if maxed or locked
-    // If it's leveled up, it's not locked anyway, but for sanity we just emit
     this.onRightClick.emit();
   }
 }
