@@ -2,24 +2,40 @@ import { Component, signal, inject } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { DialogComponent } from '../dialog/dialog.component';
+import { DialogService } from '../../services/dialog.service';
 import { TalentService } from '../../services/talent.service';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, CommonModule, DialogComponent],
+  imports: [
+    RouterOutlet,
+    RouterLink,
+    RouterLinkActive,
+    CommonModule,
+    DialogComponent,
+    LucideAngularModule
+  ],
   template: `
     <div class="app-layout">
       <!-- Mobile Header (Only visible on mobile) -->
       <header class="mobile-header">
         <button class="menu-toggle" (click)="toggleSidebar()">
-          <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none">
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-          </svg>
+          <lucide-icon name="menu" [size]="28" strokeWidth="2"></lucide-icon>
         </button>
         <h3 class="app-title">ShopTitans Tool</h3>
+        <div class="header-actions">
+          <button class="action-btn" (click)="showHelp()" title="使用教學">
+            <lucide-icon name="help-circle" [size]="20" strokeWidth="2"></lucide-icon>
+          </button>
+          <a class="action-btn link-btn" href="https://github.com/dase1353/ShopTitansTool" target="_blank" title="GitHub 原始碼">
+            <lucide-icon name="github" [size]="20" strokeWidth="2"></lucide-icon>
+          </a>
+          <a class="action-btn link-btn" href="https://playshoptitans.com/zh-tw/store" target="_blank" title="官方網站">
+            <lucide-icon name="globe" [size]="20" strokeWidth="2"></lucide-icon>
+          </a>
+        </div>
       </header>
 
       <!-- Global Sidebar -->
@@ -33,13 +49,14 @@ import { TalentService } from '../../services/talent.service';
             <img src="ShopTitansAssets/Misc Icons/icon_global_skilltree.png" class="menu-icon" alt="才華樹" />
           </a>
           
+          <a class="tool-btn" routerLink="/game-data" routerLinkActive="active" title="遊戲資料" (click)="closeSidebar()">
+            <lucide-icon name="database" [size]="28" strokeWidth="2" class="menu-icon"></lucide-icon>
+          </a>
+          
           <div class="menu-spacer"></div>
           
           <a class="tool-btn" routerLink="/settings" routerLinkActive="active" title="設定" (click)="closeSidebar()">
-            <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none" class="menu-icon">
-              <circle cx="12" cy="12" r="3"></circle>
-              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-            </svg>
+            <lucide-icon name="settings" [size]="28" strokeWidth="2" class="menu-icon"></lucide-icon>
           </a>
         </nav>
       </aside>
@@ -51,6 +68,17 @@ import { TalentService } from '../../services/talent.service';
       <main class="main-content">
         <header class="content-header desktop-only">
            <h3 class="app-title">傳奇商店 / ShopTitans Tool</h3>
+           <div class="header-actions">
+            <button class="action-btn" (click)="showHelp()" title="使用教學">
+              <lucide-icon name="help-circle" [size]="20" strokeWidth="2"></lucide-icon>
+            </button>
+            <a class="action-btn link-btn" href="https://github.com/dase1353/ShopTitansTool" target="_blank" title="GitHub 原始碼">
+              <lucide-icon name="github" [size]="20" strokeWidth="2"></lucide-icon>
+            </a>
+            <a class="action-btn link-btn" href="https://playshoptitans.com/zh-tw/store" target="_blank" title="官方網站">
+              <lucide-icon name="globe" [size]="20" strokeWidth="2"></lucide-icon>
+            </a>
+           </div>
         </header>
         <div class="route-wrapper">
           <router-outlet />
@@ -137,10 +165,8 @@ import { TalentService } from '../../services/talent.service';
     }
 
     .tool-btn.active {
-      background: rgba(255, 215, 0, 0.1);
-      border-right: 3px solid var(--accent-primary);
-      color: var(--accent-primary);
-      box-shadow: inset -20px 0 20px -20px var(--accent-glow);
+      background: rgba(255, 255, 255, 0.15);
+      color: var(--text-primary);
     }
 
     .menu-icon {
@@ -166,6 +192,7 @@ import { TalentService } from '../../services/talent.service';
       border-bottom: 1px solid var(--border-glass);
       display: flex;
       align-items: center;
+      justify-content: space-between;
     }
 
     .app-title {
@@ -176,6 +203,41 @@ import { TalentService } from '../../services/talent.service';
       letter-spacing: 2px;
       text-shadow: 0 2px 10px rgba(0,0,0,0.5);
       font-weight: 800;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-left: auto;
+    }
+
+    .action-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      border: 1px solid var(--border-glass);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 1.1rem;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .action-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      color: var(--text-primary);
+      border-color: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+    }
+    
+    .action-btn:active {
+      transform: translateY(0);
     }
 
     .route-wrapper {
@@ -206,6 +268,7 @@ import { TalentService } from '../../services/talent.service';
       .mobile-header {
         display: flex;
         align-items: center;
+        justify-content: space-between;
         padding: 0.5rem 1rem;
         background: var(--bg-surface-elevated);
         border-bottom: 1px solid var(--border-glass);
@@ -275,6 +338,7 @@ import { TalentService } from '../../services/talent.service';
 })
 export class AppLayoutComponent {
   isSidebarOpen = false;
+  private dialog = inject(DialogService);
 
   toggleSidebar() {
     this.isSidebarOpen = !this.isSidebarOpen;
@@ -282,5 +346,9 @@ export class AppLayoutComponent {
 
   closeSidebar() {
     this.isSidebarOpen = false;
+  }
+
+  showHelp() {
+    this.dialog.alert('<strong>【ShopTitans Tool 使用教學】</strong><br><br>1. 在左側選單選擇不同工具。<br>2. 【才華樹】：可編輯測試才華點分配。<br>3. 【遊戲資料】：即將推出。<br><br>如果您覺得好用，歡迎到 GitHub 給我們一顆 Star！');
   }
 }

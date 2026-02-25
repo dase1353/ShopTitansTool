@@ -7,11 +7,18 @@ import { TalentTreeType } from '../../models/talent.model';
 import { TalentEditorComponent } from '../talent-editor/talent-editor.component';
 import { DialogService } from '../../services/dialog.service';
 import { DialogComponent } from '../dialog/dialog.component';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-talent-container',
   standalone: true,
-  imports: [CommonModule, TalentTreeComponent, TalentEditorComponent, DialogComponent],
+  imports: [
+    CommonModule,
+    TalentTreeComponent,
+    TalentEditorComponent,
+    DialogComponent,
+    LucideAngularModule
+  ],
   template: `
     <div class="talent-container">
         <div class="content-wrapper">
@@ -61,10 +68,10 @@ import { DialogComponent } from '../dialog/dialog.component';
               <div class="stat-item reset-item">
                 @if (talentService.spentPoints() > 0) {
                   <button class="btn-profile" (click)="shareBuild()" title="分享流派">
-                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                    <lucide-icon name="share-2" [size]="20" strokeWidth="2"></lucide-icon>
                   </button>
                   <button class="btn-profile" (click)="isSaveLoadOpen.set(true)" title="存檔與讀取">
-                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                    <lucide-icon name="save" [size]="20" strokeWidth="2"></lucide-icon>
                   </button>
                   <button class="btn-reset-all" (click)="resetAllPoints()">全部重設</button>
                 }
@@ -118,7 +125,7 @@ import { DialogComponent } from '../dialog/dialog.component';
         
         @if (talentService.isEditorEnabled()) {
           <button class="editor-fab" [class.active]="talentService.activeTool() === 'editor'" (click)="toggleEditorTool()">
-            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+            <lucide-icon name="edit-2" [size]="24" strokeWidth="2"></lucide-icon>
           </button>
         }
     </div>
