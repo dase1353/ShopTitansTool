@@ -7,7 +7,7 @@ import { Blueprint } from '../models/blueprint.model';
   providedIn: 'root'
 })
 export class BlueprintService {
-  private readonly blueprintUrl = '/ShopTitansAssets/blueprint/bp.json';
+  private readonly blueprintUrl = 'ShopTitansAssets/blueprint/bp.json';
 
   private blueprintsCache: Blueprint[] | null = null;
 
