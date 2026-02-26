@@ -41,7 +41,7 @@ import { LucideAngularModule } from 'lucide-angular';
       <!-- Global Sidebar -->
       <aside class="sidebar tools-menu glass-panel" [class.open]="isSidebarOpen">
         <div class="sidebar-brand">
-          <div class="banner-logo" [style.backgroundImage]="'url(ShopTitansAssets/Logos/ShopTitans_Logo_RGB.png)'"></div>
+          <div class="banner-logo" [style.backgroundImage]="'url(ShopTitansAssets/Logos/ShopTitans_Logo_RGB_zh-tw.png)'"></div>
         </div>
 
         <nav class="nav-links">

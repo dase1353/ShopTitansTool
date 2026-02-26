@@ -1,1 +1,277 @@
-<p>暫時不知道要放啥</p>
+<div class="game-data-container">
+  <!-- Header & Filters -->
+  <header class="glass-header">
+    <div class="header-content">
+      <div class="brand">
+        <lucide-icon name="database" [size]="28" class="brand-icon"></lucide-icon>
+        <div>
+          <h1>裝備圖鑑</h1>
+          <p class="subtitle">Shop Titans 藍圖資料庫</p>
+        </div>
+      </div>
+
+      <div class="filters-container">
+        <div class="search-box">
+          <lucide-icon name="search" [size]="20" class="search-icon"></lucide-icon>
+          <input type="text" [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)" placeholder="搜尋裝備名稱..."
+            class="glass-input" />
+        </div>
+
+        <div class="select-wrapper">
+          <select [ngModel]="selectedTier()" (ngModelChange)="selectedTier.set($event)" class="glass-select">
+            <option [ngValue]="null">所有階級 (Tier)</option>
+            @for (tier of availableTiers(); track tier) {
+            <option [ngValue]="tier">Tier {{ tier }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="select-wrapper">
+          <select [ngModel]="selectedType()" (ngModelChange)="selectedType.set($event)" class="glass-select">
+            <option [ngValue]="null">所有類型</option>
+            @for (type of availableTypes(); track type) {
+            <option [value]="type">{{ type }}</option>
+            }
+          </select>
+        </div>
+        <div class="view-toggles">
+          <button class="toggle-btn" [class.active]="viewMode() === 'grid'" (click)="viewMode.set('grid')" title="網格檢視">
+            <lucide-icon name="layout-grid" [size]="18"></lucide-icon>
+          </button>
+          <button class="toggle-btn" [class.active]="viewMode() === 'list'" (click)="viewMode.set('list')" title="列表檢視">
+            <lucide-icon name="list" [size]="18"></lucide-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Loading State -->
+  @if (isLoading()) {
+  <div class="loading-state">
+    <lucide-icon name="loader-2" [size]="48" class="spinner-icon"></lucide-icon>
+    <p>正在載入藍圖資料...</p>
+  </div>
+  } @else {
+  <!-- Main Content Grid / List -->
+  <main class="blueprints-container" [class.list-view]="viewMode() === 'list'">
+    @if (filteredBlueprints().length === 0) {
+    <div class="empty-state">
+      @if (!searchQuery() && selectedTier() === null && selectedType() === null) {
+      <lucide-icon name="package" [size]="64" class="empty-icon"></lucide-icon>
+      <h3>請輸入或選擇條件以顯示裝備</h3>
+      <p>設定符合您需求的名稱、階級或是類型。</p>
+      } @else {
+      <lucide-icon name="ghost" [size]="64" class="empty-icon"></lucide-icon>
+      <h3>找不到符合條件的裝備</h3>
+      <p>嘗試更換關鍵字或放寬過濾條件。</p>
+      }
+    </div>
+    } @else {
+    @if (viewMode() === 'grid') {
+    @for (bp of filteredBlueprints(); track bp.Name) {
+    <article class="bp-card glass-panel">
+      <div class="bp-card-header">
+        <div class="bp-icon-badge">
+          <lucide-icon [name]="getTypeIcon(bp.Type)" [size]="24"></lucide-icon>
+        </div>
+        <div class="bp-title-area">
+          <h2 class="bp-name">{{ bp.Name }}</h2>
+          <div class="bp-badges">
+            <span class="badge tier-badge">T{{ bp.Tier }}</span>
+            <span class="badge type-badge">{{ bp.Type }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="bp-stats">
+        <div class="stat-column">
+          <div class="stat-label">基礎價值</div>
+          <div class="stat-value gold-text">
+            <lucide-icon name="coins" [size]="16" class="inline-icon"></lucide-icon>
+            {{ bp.Value | number }}
+          </div>
+        </div>
+        <div class="stat-column right-align">
+          <div class="stat-label">製作時間</div>
+          <div class="stat-value time-text">
+            <lucide-icon name="clock" [size]="16" class="inline-icon"></lucide-icon>
+            {{ bp['Crafting Time (formatted)'] }}
+          </div>
+        </div>
+      </div>
+
+      <div class="bp-divider"></div>
+
+      <!-- Attributes (ATK, DEF, HP, EVA, CRIT) -->
+      @if ((bp.ATK !== '---' && bp.ATK !== null && bp.ATK !== '') ||
+      (bp.DEF !== '---' && bp.DEF !== null && bp.DEF !== '') ||
+      (bp.HP !== '---' && bp.HP !== null && bp.HP !== '') ||
+      (bp.EVA !== '---' && bp.EVA !== null && bp.EVA !== '') ||
+      (bp.CRIT !== '---' && bp.CRIT !== null && bp.CRIT !== '')) {
+      <div class="bp-attributes">
+        @if (bp.ATK !== '---' && bp.ATK !== '' && bp.ATK !== null) {
+        <div class="attr-item atk"><lucide-icon name="swords" [size]="14"></lucide-icon> <span>{{ bp.ATK }}</span></div>
+        }
+        @if (bp.DEF !== '---' && bp.DEF !== '' && bp.DEF !== null) {
+        <div class="attr-item def"><lucide-icon name="shield" [size]="14"></lucide-icon> <span>{{ bp.DEF }}</span></div>
+        }
+        @if (bp.HP !== '---' && bp.HP !== '' && bp.HP !== null) {
+        <div class="attr-item hp"><lucide-icon name="heart" [size]="14"></lucide-icon> <span>{{ bp.HP }}</span></div>
+        }
+        @if (bp.EVA !== '---' && bp.EVA !== '' && bp.EVA !== null) {
+        <div class="attr-item eva"><lucide-icon name="wind" [size]="14"></lucide-icon> <span>{{ bp.EVA }}</span></div>
+        }
+        @if (bp.CRIT !== '---' && bp.CRIT !== '' && bp.CRIT !== null) {
+        <div class="attr-item crit"><lucide-icon name="zap" [size]="14"></lucide-icon> <span>{{ bp.CRIT }}</span></div>
+        }
+      </div>
+      }
+
+      <!-- Requirements -->
+      <div class="bp-requirements">
+
+        <!-- Resources -->
+        <div class="req-title">製造素材</div>
+        <div class="resources-list">
+          @if (bp.Iron !== '---' && bp.Iron !== null) { <span class="resource-tag iron">鐵 x{{ bp.Iron }}</span> }
+          @if (bp.Wood !== '---' && bp.Wood !== null) { <span class="resource-tag wood">木 x{{ bp.Wood }}</span> }
+          @if (bp.Leather !== '---' && bp.Leather !== null) { <span class="resource-tag leather">皮革 x{{ bp.Leather
+            }}</span> }
+          @if (bp.Herbs !== '---' && bp.Herbs !== null) { <span class="resource-tag herbs">草藥 x{{ bp.Herbs }}</span> }
+          @if (bp.Steel !== '---' && bp.Steel !== null) { <span class="resource-tag steel">鋼 x{{ bp.Steel }}</span> }
+          @if (bp.Ironwood !== '---' && bp.Ironwood !== null) { <span class="resource-tag ironwood">鐵木 x{{ bp.Ironwood
+            }}</span> }
+          @if (bp.Cloth !== '---' && bp.Cloth !== null) { <span class="resource-tag cloth">布料 x{{ bp.Cloth }}</span> }
+          @if (bp.Oil !== '---' && bp.Oil !== null) { <span class="resource-tag oil">油 x{{ bp.Oil }}</span> }
+          @if (bp.Gems !== '---' && bp.Gems !== null) { <span class="resource-tag gems">寶石 x{{ bp.Gems }}</span> }
+          @if (bp.Mana !== '---' && bp.Mana !== null) { <span class="resource-tag mana">乙太 x{{ bp.Mana }}</span> }
+          @if (bp.Essence !== '---' && bp.Essence !== null) { <span class="resource-tag essence">精華 x{{ bp.Essence
+            }}</span> }
+          @if (bp.Iron === '---' && bp.Wood === '---' && bp.Leather === '---' && bp.Herbs === '---' && bp.Steel ===
+          '---' && bp.Ironwood === '---' && bp.Cloth === '---' && bp.Oil === '---' && bp.Gems === '---' && bp.Mana ===
+          '---' && bp.Essence === '---') {
+          <span class="text-muted">無素材需求</span>
+          }
+        </div>
+
+        <div class="req-title mt-2">特殊零件</div>
+        <div class="components-list">
+          @if (bp['Component'] !== '---' && bp['Component'] !== null) {
+          <span class="component-text">• {{ bp['Component'] }} <span class="component-amt">x{{ bp['Amount Needed'] || 1
+              }}</span> <span class="quality-text">({{ bp['Component Quality'] }})</span></span>
+          }
+          @if (bp['Component 2'] !== '---' && bp['Component 2'] !== null) {
+          <span class="component-text">• {{ bp['Component 2'] }} <span class="component-amt">x{{ bp['Amount Needed 2']
+              || 1 }}</span> <span class="quality-text">({{ bp['Component Quality 2'] }})</span></span>
+          }
+          @if ((bp['Component'] === '---' || bp['Component'] === null) && (bp['Component 2'] === '---' ||
+          bp['Component 2'] === null)) {
+          <span class="text-muted">無特殊零件需求</span>
+          }
+        </div>
+
+        <div class="req-title mt-2">需求工人</div>
+        <div class="workers-list">
+          @if (bp['Required Worker'] !== '---' && bp['Required Worker'] !== null) {
+          <span class="worker-tag">
+            <lucide-icon name="hammer" [size]="12"></lucide-icon>
+            {{ bp['Required Worker'] }} (Lv.{{ bp['Worker Level'] }})
+          </span>
+          }
+          @if (bp['Required Worker 2'] !== '---' && bp['Required Worker 2'] !== null) {
+          <span class="worker-tag">
+            <lucide-icon name="hammer" [size]="12"></lucide-icon>
+            {{ bp['Required Worker 2'] }} (Lv.{{ bp['Worker Level 2'] }})
+          </span>
+          }
+          @if (bp['Required Worker 3'] !== '---' && bp['Required Worker 3'] !== null) {
+          <span class="worker-tag">
+            <lucide-icon name="hammer" [size]="12"></lucide-icon>
+            {{ bp['Required Worker 3'] }} (Lv.{{ bp['Worker Level 3'] }})
+          </span>
+          }
+        </div>
+
+      </div>
+    </article>
+    }
+    @empty {
+    <div class="empty-state">
+      @if (!searchQuery() && selectedTier() === null && selectedType() === null) {
+      <lucide-icon name="package" [size]="64" class="empty-icon"></lucide-icon>
+      <h3>請輸入或選擇條件以顯示裝備</h3>
+      <p>設定符合您需求的名稱、階級或是類型。</p>
+      } @else {
+      <lucide-icon name="ghost" [size]="64" class="empty-icon"></lucide-icon>
+      <h3>找不到符合條件的裝備</h3>
+      <p>嘗試更換關鍵字或放寬過濾條件。</p>
+      }
+    </div>
+    }
+    } @else {
+    <div class="table-container glass-panel">
+      <table class="bp-table">
+        <thead>
+          <tr>
+            <th>裝備</th>
+            <th>素材需求</th>
+            <th>特殊零件</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (bp of filteredBlueprints(); track bp.Name) {
+          <tr>
+            <td>
+              <div class="td-equip">
+                <div class="td-name">
+                  <lucide-icon [name]="getTypeIcon(bp.Type)" [size]="20" class="td-icon"></lucide-icon>
+                  <strong>{{ bp.Name }}</strong>
+                </div>
+                <div class="bp-badges">
+                  <span class="badge tier-badge">T{{ bp.Tier }}</span>
+                  <span class="badge type-badge">{{ bp.Type }}</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="resources-list small">
+                @if (bp.Iron !== '---' && bp.Iron !== null) { <span class="resource-tag iron">鐵 {{ bp.Iron }}</span> }
+                @if (bp.Wood !== '---' && bp.Wood !== null) { <span class="resource-tag wood">木 {{ bp.Wood }}</span> }
+                @if (bp.Leather !== '---' && bp.Leather !== null) { <span class="resource-tag leather">皮 {{ bp.Leather
+                  }}</span> }
+                @if (bp.Herbs !== '---' && bp.Herbs !== null) { <span class="resource-tag herbs">草 {{ bp.Herbs }}</span>
+                }
+                @if (bp.Steel !== '---' && bp.Steel !== null) { <span class="resource-tag steel">鋼 {{ bp.Steel }}</span>
+                }
+                @if (bp.Ironwood !== '---' && bp.Ironwood !== null) { <span class="resource-tag ironwood">鐵木 {{
+                  bp.Ironwood }}</span> }
+                @if (bp.Cloth !== '---' && bp.Cloth !== null) { <span class="resource-tag cloth">布 {{ bp.Cloth }}</span>
+                }
+                @if (bp.Oil !== '---' && bp.Oil !== null) { <span class="resource-tag oil">油 {{ bp.Oil }}</span> }
+                @if (bp.Gems !== '---' && bp.Gems !== null) { <span class="resource-tag gems">寶石 {{ bp.Gems }}</span> }
+                @if (bp.Mana !== '---' && bp.Mana !== null) { <span class="resource-tag mana">乙太 {{ bp.Mana }}</span> }
+                @if (bp.Essence !== '---' && bp.Essence !== null) { <span class="resource-tag essence">精華 {{ bp.Essence
+                  }}</span> }
+              </div>
+            </td>
+            <td>
+              <div class="components-list small">
+                @if (bp['Component'] !== '---' && bp['Component'] !== null) {
+                <span>{{ bp['Component'] }}x{{ bp['Amount Needed'] || 1 }}</span>
+                }
+                @if (bp['Component 2'] !== '---' && bp['Component 2'] !== null) {
+                <span>{{ bp['Component 2'] }}x{{ bp['Amount Needed 2'] || 1 }}</span>
+                }
+              </div>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    }
+    }
+  </main>
+  }
+</div>
