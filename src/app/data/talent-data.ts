@@ -689,7 +689,8 @@ export const QUESTING_TALENTS: TalentNode[] = [
         "icon": "ShopTitansAssets/Talent Tree/icon_skilltree_instantQuest.png",
         "prerequisites": [
             "questing_1771690263393",
-            "questing_1771690625624"
+            "questing_1771690625624",
+            "questing_1771690687495"
         ],
         "requiredPoints": 3,
         "position": {
