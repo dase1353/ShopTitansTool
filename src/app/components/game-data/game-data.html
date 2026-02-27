@@ -13,7 +13,7 @@
       <div class="filters-container">
         <div class="search-box">
           <lucide-icon name="search" [size]="20" class="search-icon"></lucide-icon>
-          <input type="text" [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)" placeholder="搜尋裝備名稱..."
+          <input type="text" [ngModel]="searchInput()" (ngModelChange)="onSearchChange($event)" placeholder="搜尋裝備名稱..."
             class="glass-input" />
         </div>
 
@@ -57,7 +57,7 @@
   <main class="blueprints-container" [class.list-view]="viewMode() === 'list'">
     @if (filteredBlueprints().length === 0) {
     <div class="empty-state">
-      @if (!searchQuery() && selectedTier() === null && selectedType() === null) {
+      @if (!searchInput() && selectedTier() === null && selectedType() === null) {
       <lucide-icon name="package" [size]="64" class="empty-icon"></lucide-icon>
       <h3>請輸入或選擇條件以顯示裝備</h3>
       <p>設定符合您需求的名稱、階級或是類型。</p>
@@ -161,12 +161,14 @@
         <div class="req-title mt-2">特殊零件</div>
         <div class="components-list">
           @if (bp['Component'] !== '---' && bp['Component'] !== null) {
-          <span class="component-text">• {{ bp['Component'] }} <span class="component-amt">x{{ bp['AmountNeeded'] ||
+          <span class="component-text">• {{ getComponentDisplayName(bp, 1) }} <span class="component-amt">x{{
+              bp['AmountNeeded'] ||
               1
               }}</span> <span class="quality-text">({{ bp['ComponentQuality'] }})</span></span>
           }
           @if (bp['Component2'] !== '---' && bp['Component2'] !== null) {
-          <span class="component-text">• {{ bp['Component2'] }} <span class="component-amt">x{{ bp['AmountNeeded2']
+          <span class="component-text">• {{ getComponentDisplayName(bp, 2) }} <span class="component-amt">x{{
+              bp['AmountNeeded2']
               || 1 }}</span> <span class="quality-text">({{ bp['ComponentQuality2'] }})</span></span>
           }
           @if ((bp['Component'] === '---' || bp['Component'] === null) && (bp['Component2'] === '---' ||
@@ -202,7 +204,7 @@
     }
     @empty {
     <div class="empty-state">
-      @if (!searchQuery() && selectedTier() === null && selectedType() === null) {
+      @if (!searchInput() && selectedTier() === null && selectedType() === null) {
       <lucide-icon name="package" [size]="64" class="empty-icon"></lucide-icon>
       <h3>請輸入或選擇條件以顯示裝備</h3>
       <p>設定符合您需求的名稱、階級或是類型。</p>
@@ -263,10 +265,10 @@
             <td>
               <div class="components-list small">
                 @if (bp['Component'] !== '---' && bp['Component'] !== null) {
-                <span>{{ bp['Component'] }}x{{ bp['AmountNeeded'] || 1 }}</span>
+                <span>{{ getComponentDisplayName(bp, 1) }}x{{ bp['AmountNeeded'] || 1 }}</span>
                 }
                 @if (bp['Component2'] !== '---' && bp['Component2'] !== null) {
-                <span>{{ bp['Component2'] }}x{{ bp['AmountNeeded2'] || 1 }}</span>
+                <span>{{ getComponentDisplayName(bp, 2) }}x{{ bp['AmountNeeded2'] || 1 }}</span>
                 }
               </div>
             </td>

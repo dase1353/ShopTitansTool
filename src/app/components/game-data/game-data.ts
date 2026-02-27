@@ -1,10 +1,13 @@
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { Component, OnInit, computed, inject, signal, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BlueprintService } from '../../services/blueprint.service';
 import { Blueprint } from '../../models/blueprint.model';
 import { FormsModule } from '@angular/forms';
 import { LucideAngularModule, Grid3X3, List } from 'lucide-angular';
 import { ItemTypePipe } from '../../pipes/item-type.pipe';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-game-data',
@@ -18,12 +21,15 @@ import { ItemTypePipe } from '../../pipes/item-type.pipe';
 })
 export class GameData implements OnInit {
   private blueprintService = inject(BlueprintService);
+  private destroyRef = inject(DestroyRef);
 
   blueprints = signal<Blueprint[]>([]);
   isLoading = signal<boolean>(true);
 
   // Filters
+  searchInput = signal<string>('');
   searchQuery = signal<string>('');
+  private searchSubject = new Subject<string>();
   selectedTier = signal<number | null>(null);
   selectedType = signal<string | null>(null);
   viewMode = signal<'grid' | 'list'>('grid');
@@ -37,6 +43,17 @@ export class GameData implements OnInit {
   availableTypes = computed(() => {
     const types = new Set(this.blueprints().map(bp => bp.Type));
     return Array.from(types).sort();
+  });
+
+  // 建立英文名稱對應中文名稱的 Map
+  equipmentTwNameMap = computed(() => {
+    const map = new Map<string, string>();
+    this.blueprints().forEach(bp => {
+      if (bp.Name && bp.Name_tw) {
+        map.set(bp.Name, bp.Name_tw);
+      }
+    });
+    return map;
   });
 
   // Filtered array
@@ -71,10 +88,23 @@ export class GameData implements OnInit {
   });
 
   ngOnInit(): void {
+    this.searchSubject.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(query => {
+      this.searchQuery.set(query);
+    });
+
     this.blueprintService.getBlueprints().subscribe(data => {
       this.blueprints.set(data);
       this.isLoading.set(false);
     });
+  }
+
+  onSearchChange(query: string) {
+    this.searchInput.set(query);
+    this.searchSubject.next(query);
   }
 
   getTypeIcon(type: string): string {
@@ -89,6 +119,24 @@ export class GameData implements OnInit {
     if (typeLower.includes('herb') || typeLower.includes('scroll')) return 'scroll';
     if (typeLower.includes('clothes') || typeLower.includes('shoes')) return 'shirt';
     return 'package'; // fallback icon
+  }
+
+  getComponentDisplayName(bp: Blueprint, index: 1 | 2): string {
+    const componentName = index === 1 ? bp['Component'] : bp['Component2'];
+    const componentQuality = index === 1 ? bp['ComponentQuality'] : bp['ComponentQuality2'];
+
+    if (!componentName || componentName === '---') {
+      return '';
+    }
+
+    if (componentQuality && componentQuality !== '---') {
+      // 這是裝備，嘗試從 Map 中取得中文名稱
+      const twName = this.equipmentTwNameMap().get(componentName);
+      return twName ? twName : componentName;
+    }
+
+    // 是一般素材，回傳原名稱
+    return componentName;
   }
 
   getItemImageUrl(uid: string): string {
