@@ -175,15 +175,19 @@
         <div class="req-title mt-2">特殊零件</div>
         <div class="components-list">
           @if (bp['Component'] !== '---' && bp['Component'] !== null) {
-          <span class="component-text">• {{ getComponentDisplayName(bp, 1) }} <span class="component-amt">x{{
+          <span class="component-text">• {{ getComponentDisplayName(bp, 1) | materialName }} <span
+              class="component-amt">x{{
               bp['AmountNeeded'] ||
               1
-              }}</span> <span class="quality-text">({{ bp['ComponentQuality'] }})</span></span>
+              }}</span>@if (bp['ComponentQuality'] !== '---') { <span class="quality-text">({{ bp['ComponentQuality'] |
+              qualityName }})</span> }</span>
           }
           @if (bp['Component2'] !== '---' && bp['Component2'] !== null) {
-          <span class="component-text">• {{ getComponentDisplayName(bp, 2) }} <span class="component-amt">x{{
+          <span class="component-text">• {{ getComponentDisplayName(bp, 2) | materialName }} <span
+              class="component-amt">x{{
               bp['AmountNeeded2']
-              || 1 }}</span> <span class="quality-text">({{ bp['ComponentQuality2'] }})</span></span>
+              || 1 }}</span>@if (bp['ComponentQuality2'] !== '---') { <span class="quality-text">({{
+              bp['ComponentQuality2'] | qualityName }})</span> }</span>
           }
           @if ((bp['Component'] === '---' || bp['Component'] === null) && (bp['Component2'] === '---' ||
           bp['Component2'] === null)) {
@@ -292,10 +296,10 @@
             <td>
               <div class="components-list small">
                 @if (bp['Component'] !== '---' && bp['Component'] !== null) {
-                <span>{{ getComponentDisplayName(bp, 1) }}x{{ bp['AmountNeeded'] || 1 }}</span>
+                <span>{{ getComponentDisplayName(bp, 1) | materialName }}x{{ bp['AmountNeeded'] || 1 }}</span>
                 }
                 @if (bp['Component2'] !== '---' && bp['Component2'] !== null) {
-                <span>{{ getComponentDisplayName(bp, 2) }}x{{ bp['AmountNeeded2'] || 1 }}</span>
+                <span>{{ getComponentDisplayName(bp, 2) | materialName }}x{{ bp['AmountNeeded2'] || 1 }}</span>
                 }
               </div>
             </td>
