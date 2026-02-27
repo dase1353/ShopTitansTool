@@ -72,7 +72,7 @@
     } @else {
     @if (viewMode() === 'grid') {
     @for (bp of filteredBlueprints(); track bp.uid) {
-    <app-blueprint-card [bp]="bp" [equipmentTwNameMap]="equipmentTwNameMap()"></app-blueprint-card>
+    <app-blueprint-card [bp]="bp" [equipmentNameMap]="equipmentNameMap()"></app-blueprint-card>
     }
     @empty {
     <div class="empty-state">
@@ -104,9 +104,9 @@
             <td>
               <div class="td-equip">
                 <div class="td-name">
-                  <img [src]="getItemImageUrl(bp.uid)" [alt]="bp.Name_tw || bp.Name" class="td-icon bp-image-small"
+                  <img [src]="getItemImageUrl(bp.uid)" [alt]="bp | itemName" class="td-icon bp-image-small"
                     loading="lazy" />
-                  <strong>{{ bp.Name_tw || bp.Name }}</strong>
+                  <strong>{{ bp | itemName }}</strong>
                 </div>
                 <div class="bp-badges">
                   <span class="badge tier-badge">T{{ bp.Tier }}</span>
@@ -168,9 +168,14 @@
                   <img [src]="getComponentImageUrl(bp['Component'])" [alt]="getComponentDisplayName(bp, 1)"
                     class="component-icon" />
                   }
+                  @if (bp['ComponentQuality'] !== '---') {
+                  <span class="component-name">{{ getComponentDisplayName(bp, 1) | itemName }}x{{ bp['AmountNeeded'] ||
+                    1 }}</span>
+                  } @else {
                   <span class="component-name">{{ getComponentDisplayName(bp, 1) | materialName | translate }}x{{
                     bp['AmountNeeded']
                     || 1 }}</span>
+                  }
                   @if (bp['ComponentQuality'] !== '---') {
                   <img [src]="getQualityImageUrl(bp['ComponentQuality'])" [alt]="bp['ComponentQuality']"
                     class="quality-icon" [title]="bp['ComponentQuality'] | qualityName | translate" />
@@ -183,8 +188,13 @@
                   <img [src]="getComponentImageUrl(bp['Component2'])" [alt]="getComponentDisplayName(bp, 2)"
                     class="component-icon" />
                   }
+                  @if (bp['ComponentQuality2'] !== '---') {
+                  <span class="component-name">{{ getComponentDisplayName(bp, 2) | itemName }}x{{ bp['AmountNeeded2'] ||
+                    1 }}</span>
+                  } @else {
                   <span class="component-name">{{ getComponentDisplayName(bp, 2) | materialName | translate }}x{{
                     bp['AmountNeeded2'] || 1 }}</span>
+                  }
                   @if (bp['ComponentQuality2'] !== '---') {
                   <img [src]="getQualityImageUrl(bp['ComponentQuality2'])" [alt]="bp['ComponentQuality2']"
                     class="quality-icon" [title]="bp['ComponentQuality2'] | qualityName | translate" />

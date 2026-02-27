@@ -28,9 +28,20 @@ import { LucideAngularModule } from 'lucide-angular';
         </button>
         <h3 class="app-title">{{ 'UI.APP_TITLE' | translate }}</h3>
         <div class="header-actions">
-          <button class="action-btn" (click)="toggleLanguage()" [title]="'UI.LANGUAGE' | translate">
-            <lucide-icon name="languages" [size]="20" strokeWidth="2"></lucide-icon>
-          </button>
+          <div class="lang-dropdown">
+            <button class="action-btn" (click)="toggleLanguageMenu()" [title]="'UI.LANGUAGE' | translate">
+              <lucide-icon name="languages" [size]="20" strokeWidth="2"></lucide-icon>
+            </button>
+            @if (isLangMenuOpen) {
+              <div class="lang-menu glass-panel">
+                @for (lang of languages; track lang.code) {
+                  <button class="lang-item" [class.active]="translate.getCurrentLang() === lang.code" (click)="setLanguage(lang.code)">
+                    {{ lang.name }}
+                  </button>
+                }
+              </div>
+            }
+          </div>
           <button class="action-btn" (click)="showHelp()" [title]="'UI.HELP' | translate">
             <lucide-icon name="help-circle" [size]="20" strokeWidth="2"></lucide-icon>
           </button>
@@ -74,9 +85,10 @@ import { LucideAngularModule } from 'lucide-angular';
         <header class="content-header desktop-only">
            <h3 class="app-title">{{ 'UI.APP_TITLE' | translate }}</h3>
            <div class="header-actions">
-            <button class="action-btn" (click)="toggleLanguage()" [title]="'UI.LANGUAGE' | translate">
+            <button class="action-btn" (click)="toggleLanguageMenu()" [title]="'UI.LANGUAGE' | translate">
               <lucide-icon name="languages" [size]="20" strokeWidth="2"></lucide-icon>
             </button>
+            
             <button class="action-btn" (click)="showHelp()" [title]="'UI.HELP' | translate">
               <lucide-icon name="help-circle" [size]="20" strokeWidth="2"></lucide-icon>
             </button>
@@ -93,6 +105,28 @@ import { LucideAngularModule } from 'lucide-angular';
         </div>
       </main>
       
+      <!-- Language Selection Modal -->
+      @if (isLangMenuOpen) {
+        <div class="lang-modal-overlay" (click)="toggleLanguageMenu()">
+          <div class="lang-modal glass-panel" (click)="$event.stopPropagation()">
+            <div class="lang-modal-header">
+              <h3>{{ 'UI.LANGUAGE' | translate }}</h3>
+            </div>
+            <div class="lang-list">
+              @for (lang of languages; track lang.code) {
+                <button class="lang-item" [class.active]="translate.getCurrentLang() === lang.code" (click)="setLanguage(lang.code)">
+                  <span class="lang-name">{{ lang.name }}</span>
+                  @if (translate.getCurrentLang() === lang.code) {
+                    <lucide-icon name="check" [size]="18"></lucide-icon>
+                  }
+                </button>
+              }
+            </div>
+            <button class="modal-close-btn" (click)="toggleLanguageMenu()">Close</button>
+          </div>
+        </div>
+      }
+
       <!-- Global Dialogs (Modals/Alerts) -->
       <app-dialog />
     </div>
@@ -248,6 +282,100 @@ import { LucideAngularModule } from 'lucide-angular';
       transform: translateY(0);
     }
 
+    .lang-modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .lang-modal {
+      width: 320px;
+      max-width: 90vw;
+      background: var(--bg-surface-elevated);
+      border-radius: 20px;
+      border: 1px solid var(--border-glass);
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+      animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .lang-modal-header h3 {
+      margin: 0;
+      text-align: center;
+      font-size: 1.3rem;
+      color: var(--text-primary);
+      letter-spacing: 1px;
+    }
+
+    .lang-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .lang-item {
+      padding: 1rem 1.2rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-glass);
+      border-radius: 12px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+    }
+
+    .lang-item:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-primary);
+      transform: translateX(4px);
+    }
+
+    .lang-item.active {
+      background: rgba(255, 215, 0, 0.1);
+      border-color: var(--accent-primary);
+      color: var(--accent-primary);
+      box-shadow: 0 4px 15px rgba(255, 215, 0, 0.1);
+    }
+
+    .modal-close-btn {
+      margin-top: 0.5rem;
+      padding: 0.8rem;
+      background: transparent;
+      border: 1px solid var(--border-glass);
+      border-radius: 12px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
+    }
+
+    .modal-close-btn:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-primary);
+    }
+
     .route-wrapper {
       flex: 1;
       height: 100%;
@@ -309,6 +437,10 @@ import { LucideAngularModule } from 'lucide-angular';
         text-overflow: ellipsis;
       }
 
+      .header-actions {
+        margin-left: 0;
+      }
+
       .desktop-only {
         display: none !important;
       }
@@ -349,8 +481,16 @@ import { LucideAngularModule } from 'lucide-angular';
 })
 export class AppLayoutComponent {
   isSidebarOpen = false;
+  isLangMenuOpen = false;
   private dialog = inject(DialogService);
-  private translate = inject(TranslateService);
+  public translate = inject(TranslateService);
+
+  languages = [
+    { code: 'zh-TW', name: '繁體中文' },
+    { code: 'en-US', name: 'English' },
+    { code: 'fr', name: 'Français' },
+    { code: 'ru', name: 'Русский' }
+  ];
 
   toggleSidebar() {
     this.isSidebarOpen = !this.isSidebarOpen;
@@ -360,11 +500,14 @@ export class AppLayoutComponent {
     this.isSidebarOpen = false;
   }
 
-  toggleLanguage() {
-    const currentLang = this.translate.currentLang;
-    const newLang = currentLang === 'zh-TW' ? 'en-US' : 'zh-TW';
-    this.translate.use(newLang);
-    localStorage.setItem('appLang', newLang);
+  toggleLanguageMenu() {
+    this.isLangMenuOpen = !this.isLangMenuOpen;
+  }
+
+  setLanguage(code: string) {
+    this.translate.use(code);
+    localStorage.setItem('appLang', code);
+    this.isLangMenuOpen = false;
   }
 
   showHelp() {

@@ -1,10 +1,10 @@
 <article class="bp-card glass-panel">
     <div class="bp-card-header">
         <div class="bp-icon-badge">
-            <img [src]="getItemImageUrl(bp.uid)" [alt]="bp.Name_tw || bp.Name" class="bp-image" loading="lazy" />
+            <img [src]="getItemImageUrl(bp.uid)" [alt]="bp | itemName" class="bp-image" loading="lazy" />
         </div>
         <div class="bp-title-area">
-            <h2 class="bp-name">{{ bp.Name_tw || bp.Name }}</h2>
+            <h2 class="bp-name">{{ bp | itemName }}</h2>
             <div class="bp-badges">
                 <span class="badge tier-badge">T{{ bp.Tier }}</span>
                 <span class="badge type-badge">{{ bp.Type | itemType | translate }}</span>
@@ -121,7 +121,11 @@
                 <img [src]="getQualityImageUrl(bp['ComponentQuality'])" [alt]="bp['ComponentQuality']"
                     class="quality-icon" [title]="bp['ComponentQuality'] | qualityName | translate" />
                 }
+                @if (bp['ComponentQuality'] !== '---') {
+                <span class="component-name">{{ getComponentDisplayName(1) | itemName }}</span>
+                } @else {
                 <span class="component-name">{{ getComponentDisplayName(1) | materialName | translate }}</span>
+                }
                 <span class="component-amt">x{{ bp['AmountNeeded'] || 1 }}</span>
             </span>
             }
@@ -135,7 +139,11 @@
                 <img [src]="getQualityImageUrl(bp['ComponentQuality2'])" [alt]="bp['ComponentQuality2']"
                     class="quality-icon" [title]="bp['ComponentQuality2'] | qualityName | translate" />
                 }
+                @if (bp['ComponentQuality2'] !== '---') {
+                <span class="component-name">{{ getComponentDisplayName(2) | itemName }}</span>
+                } @else {
                 <span class="component-name">{{ getComponentDisplayName(2) | materialName | translate }}</span>
+                }
                 <span class="component-amt">x{{ bp['AmountNeeded2'] || 1 }}</span>
             </span>
             }

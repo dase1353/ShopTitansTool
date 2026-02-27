@@ -13,11 +13,12 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TranslateModule } from '@ngx-translate/core';
 import { BlueprintCardComponent } from '../blueprint-card/blueprint-card.component';
+import { ItemNamePipe } from '../../pipes/item-name.pipe';
 
 @Component({
   selector: 'app-game-data',
   standalone: true,
-  imports: [CommonModule, FormsModule, LucideAngularModule, ItemTypePipe, WorkerNamePipe, MaterialNamePipe, QualityNamePipe, TranslateModule, BlueprintCardComponent],
+  imports: [CommonModule, FormsModule, LucideAngularModule, ItemTypePipe, WorkerNamePipe, MaterialNamePipe, QualityNamePipe, TranslateModule, BlueprintCardComponent, ItemNamePipe],
   providers: [
     { provide: 'LucideIcons', useValue: { Grid3X3, List } }
   ],
@@ -50,12 +51,17 @@ export class GameData implements OnInit {
     return Array.from(types).sort();
   });
 
-  // 建立英文名稱對應中文名稱的 Map
-  equipmentTwNameMap = computed(() => {
-    const map = new Map<string, string>();
+  // 建立英文名稱對應多國語言名稱的 Map (key: Name, value: {en, tw})
+  equipmentNameMap = computed(() => {
+    const map = new Map<string, { en: string, tw: string, fr: string, ru: string }>();
     this.blueprints().forEach(bp => {
-      if (bp.Name && bp.Name_tw) {
-        map.set(bp.Name, bp.Name_tw);
+      if (bp.Name) {
+        map.set(bp.Name, {
+          en: bp.Name_en || bp.Name,
+          tw: bp.Name_tw || bp.Name,
+          fr: bp.Name_fr || bp.Name_en || bp.Name,
+          ru: bp.Name_ru || bp.Name_en || bp.Name
+        });
       }
     });
     return map;
@@ -126,7 +132,7 @@ export class GameData implements OnInit {
     return 'package'; // fallback icon
   }
 
-  getComponentDisplayName(bp: Blueprint, index: 1 | 2): string {
+  getComponentDisplayName(bp: Blueprint, index: 1 | 2): any {
     const componentName = index === 1 ? bp['Component'] : bp['Component2'];
     const componentQuality = index === 1 ? bp['ComponentQuality'] : bp['ComponentQuality2'];
 
@@ -135,12 +141,21 @@ export class GameData implements OnInit {
     }
 
     if (componentQuality && componentQuality !== '---') {
-      // 這是裝備，嘗試從 Map 中取得中文名稱
-      const twName = this.equipmentTwNameMap().get(componentName);
-      return twName ? twName : componentName;
+      // 這是裝備，回傳一個假的 bp 物件給 itemName pipe 使用
+      const names = this.equipmentNameMap().get(componentName);
+      if (names) {
+        return {
+          Name: componentName,
+          Name_en: names.en,
+          Name_tw: names.tw,
+          Name_fr: names.fr,
+          Name_ru: names.ru
+        };
+      }
+      return { Name: componentName };
     }
 
-    // 是一般素材，回傳原名稱
+    // 是一般素材，回傳原名稱字串給 materialName pipe 使用
     return componentName;
   }
 

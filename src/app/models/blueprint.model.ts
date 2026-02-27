@@ -2,6 +2,8 @@ export interface Blueprint {
     "uid": string;
     "Name_tw": string;
     "Name_en": string;
+    "Name_fr"?: string;
+    "Name_ru"?: string;
     "webtype": string;
     "Name": string;
     "Type": string;

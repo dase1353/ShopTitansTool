@@ -13,15 +13,14 @@ export class App {
     private translate = inject(TranslateService);
 
     constructor() {
-        this.translate.addLangs(['zh-TW', 'en-US']);
-        this.translate.setDefaultLang('zh-TW');
+        this.translate.addLangs(['zh-TW', 'en-US', 'fr', 'ru']);
+        this.translate.setFallbackLang('zh-TW');
 
         const savedLang = localStorage.getItem('appLang');
         if (savedLang) {
             this.translate.use(savedLang);
         } else {
-            const browserLang = this.translate.getBrowserLang();
-            this.translate.use(browserLang && browserLang.includes('zh') ? 'zh-TW' : 'en-US');
+            this.translate.use('zh-TW');
         }
     }
 }

@@ -8,6 +8,8 @@ import { QualityNamePipe } from '../../pipes/quality-name.pipe';
 import { WorkerNamePipe } from '../../pipes/worker-name-pipe';
 import { Blueprint } from '../../models/blueprint.model';
 
+import { ItemNamePipe } from '../../pipes/item-name.pipe';
+
 @Component({
     selector: 'app-blueprint-card',
     standalone: true,
@@ -18,17 +20,18 @@ import { Blueprint } from '../../models/blueprint.model';
         ItemTypePipe,
         WorkerNamePipe,
         MaterialNamePipe,
-        QualityNamePipe
+        QualityNamePipe,
+        ItemNamePipe
     ],
     templateUrl: './blueprint-card.component.html',
-    
+
     styleUrl: "./blueprint-card.component.css"
 })
 export class BlueprintCardComponent {
     @Input({ required: true }) bp!: Blueprint;
-    @Input() equipmentTwNameMap!: Map<string, string>;
+    @Input() equipmentNameMap!: Map<string, { en: string, tw: string, fr: string, ru: string }>;
 
-    getComponentDisplayName(index: 1 | 2): string {
+    getComponentDisplayName(index: 1 | 2): any {
         const componentName = index === 1 ? this.bp['Component'] : this.bp['Component2'];
         const componentQuality = index === 1 ? this.bp['ComponentQuality'] : this.bp['ComponentQuality2'];
 
@@ -37,8 +40,17 @@ export class BlueprintCardComponent {
         }
 
         if (componentQuality && componentQuality !== '---') {
-            const twName = this.equipmentTwNameMap?.get(componentName);
-            return twName ? twName : componentName;
+            const names = this.equipmentNameMap?.get(componentName);
+            if (names) {
+                return {
+                    Name: componentName,
+                    Name_en: names.en,
+                    Name_tw: names.tw,
+                    Name_fr: names.fr,
+                    Name_ru: names.ru
+                };
+            }
+            return { Name: componentName };
         }
 
         return componentName;
