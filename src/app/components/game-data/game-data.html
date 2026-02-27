@@ -69,14 +69,14 @@
     </div>
     } @else {
     @if (viewMode() === 'grid') {
-    @for (bp of filteredBlueprints(); track bp.Name) {
+    @for (bp of filteredBlueprints(); track bp.uid) {
     <article class="bp-card glass-panel">
       <div class="bp-card-header">
         <div class="bp-icon-badge">
           <lucide-icon [name]="getTypeIcon(bp.Type)" [size]="24"></lucide-icon>
         </div>
         <div class="bp-title-area">
-          <h2 class="bp-name">{{ bp.Name }}</h2>
+          <h2 class="bp-name">{{ bp.Name_tw || bp.Name }}</h2>
           <div class="bp-badges">
             <span class="badge tier-badge">T{{ bp.Tier }}</span>
             <span class="badge type-badge">{{ bp.Type }}</span>
@@ -96,7 +96,7 @@
           <div class="stat-label">製作時間</div>
           <div class="stat-value time-text">
             <lucide-icon name="clock" [size]="16" class="inline-icon"></lucide-icon>
-            {{ bp['Crafting Time (formatted)'] }}
+            {{ bp['CraftingTime(formatted)'] }}
           </div>
         </div>
       </div>
@@ -111,10 +111,12 @@
       (bp.CRIT !== '---' && bp.CRIT !== null && bp.CRIT !== '')) {
       <div class="bp-attributes">
         @if (bp.ATK !== '---' && bp.ATK !== '' && bp.ATK !== null) {
-        <div class="attr-item atk"><lucide-icon name="swords" [size]="14"></lucide-icon> <span>{{ bp.ATK }}</span></div>
+        <div class="attr-item atk"><lucide-icon name="swords" [size]="14"></lucide-icon> <span>{{ bp.ATK }}</span>
+        </div>
         }
         @if (bp.DEF !== '---' && bp.DEF !== '' && bp.DEF !== null) {
-        <div class="attr-item def"><lucide-icon name="shield" [size]="14"></lucide-icon> <span>{{ bp.DEF }}</span></div>
+        <div class="attr-item def"><lucide-icon name="shield" [size]="14"></lucide-icon> <span>{{ bp.DEF }}</span>
+        </div>
         }
         @if (bp.HP !== '---' && bp.HP !== '' && bp.HP !== null) {
         <div class="attr-item hp"><lucide-icon name="heart" [size]="14"></lucide-icon> <span>{{ bp.HP }}</span></div>
@@ -123,7 +125,8 @@
         <div class="attr-item eva"><lucide-icon name="wind" [size]="14"></lucide-icon> <span>{{ bp.EVA }}</span></div>
         }
         @if (bp.CRIT !== '---' && bp.CRIT !== '' && bp.CRIT !== null) {
-        <div class="attr-item crit"><lucide-icon name="zap" [size]="14"></lucide-icon> <span>{{ bp.CRIT }}</span></div>
+        <div class="attr-item crit"><lucide-icon name="zap" [size]="14"></lucide-icon> <span>{{ bp.CRIT }}</span>
+        </div>
         }
       </div>
       }
@@ -158,37 +161,38 @@
         <div class="req-title mt-2">特殊零件</div>
         <div class="components-list">
           @if (bp['Component'] !== '---' && bp['Component'] !== null) {
-          <span class="component-text">• {{ bp['Component'] }} <span class="component-amt">x{{ bp['Amount Needed'] || 1
-              }}</span> <span class="quality-text">({{ bp['Component Quality'] }})</span></span>
+          <span class="component-text">• {{ bp['Component'] }} <span class="component-amt">x{{ bp['AmountNeeded'] ||
+              1
+              }}</span> <span class="quality-text">({{ bp['ComponentQuality'] }})</span></span>
           }
-          @if (bp['Component 2'] !== '---' && bp['Component 2'] !== null) {
-          <span class="component-text">• {{ bp['Component 2'] }} <span class="component-amt">x{{ bp['Amount Needed 2']
-              || 1 }}</span> <span class="quality-text">({{ bp['Component Quality 2'] }})</span></span>
+          @if (bp['Component2'] !== '---' && bp['Component2'] !== null) {
+          <span class="component-text">• {{ bp['Component2'] }} <span class="component-amt">x{{ bp['AmountNeeded2']
+              || 1 }}</span> <span class="quality-text">({{ bp['ComponentQuality2'] }})</span></span>
           }
-          @if ((bp['Component'] === '---' || bp['Component'] === null) && (bp['Component 2'] === '---' ||
-          bp['Component 2'] === null)) {
+          @if ((bp['Component'] === '---' || bp['Component'] === null) && (bp['Component2'] === '---' ||
+          bp['Component2'] === null)) {
           <span class="text-muted">無特殊零件需求</span>
           }
         </div>
 
         <div class="req-title mt-2">需求工人</div>
         <div class="workers-list">
-          @if (bp['Required Worker'] !== '---' && bp['Required Worker'] !== null) {
+          @if (bp['RequiredWorker'] !== '---' && bp['RequiredWorker'] !== null) {
           <span class="worker-tag">
             <lucide-icon name="hammer" [size]="12"></lucide-icon>
-            {{ bp['Required Worker'] }} (Lv.{{ bp['Worker Level'] }})
+            {{ bp['RequiredWorker'] }} (Lv.{{ bp['WorkerLevel'] }})
           </span>
           }
-          @if (bp['Required Worker 2'] !== '---' && bp['Required Worker 2'] !== null) {
+          @if (bp['RequiredWorker2'] !== '---' && bp['RequiredWorker2'] !== null) {
           <span class="worker-tag">
             <lucide-icon name="hammer" [size]="12"></lucide-icon>
-            {{ bp['Required Worker 2'] }} (Lv.{{ bp['Worker Level 2'] }})
+            {{ bp['RequiredWorker2'] }} (Lv.{{ bp['WorkerLevel2'] }})
           </span>
           }
-          @if (bp['Required Worker 3'] !== '---' && bp['Required Worker 3'] !== null) {
+          @if (bp['RequiredWorker3'] !== '---' && bp['RequiredWorker3'] !== null) {
           <span class="worker-tag">
             <lucide-icon name="hammer" [size]="12"></lucide-icon>
-            {{ bp['Required Worker 3'] }} (Lv.{{ bp['Worker Level 3'] }})
+            {{ bp['RequiredWorker3'] }} (Lv.{{ bp['WorkerLevel3'] }})
           </span>
           }
         </div>
@@ -220,13 +224,13 @@
           </tr>
         </thead>
         <tbody>
-          @for (bp of filteredBlueprints(); track bp.Name) {
+          @for (bp of filteredBlueprints(); track bp.uid) {
           <tr>
             <td>
               <div class="td-equip">
                 <div class="td-name">
                   <lucide-icon [name]="getTypeIcon(bp.Type)" [size]="20" class="td-icon"></lucide-icon>
-                  <strong>{{ bp.Name }}</strong>
+                  <strong>{{ bp.Name_tw || bp.Name }}</strong>
                 </div>
                 <div class="bp-badges">
                   <span class="badge tier-badge">T{{ bp.Tier }}</span>
@@ -258,10 +262,10 @@
             <td>
               <div class="components-list small">
                 @if (bp['Component'] !== '---' && bp['Component'] !== null) {
-                <span>{{ bp['Component'] }}x{{ bp['Amount Needed'] || 1 }}</span>
+                <span>{{ bp['Component'] }}x{{ bp['AmountNeeded'] || 1 }}</span>
                 }
-                @if (bp['Component 2'] !== '---' && bp['Component 2'] !== null) {
-                <span>{{ bp['Component 2'] }}x{{ bp['Amount Needed 2'] || 1 }}</span>
+                @if (bp['Component2'] !== '---' && bp['Component2'] !== null) {
+                <span>{{ bp['Component2'] }}x{{ bp['AmountNeeded2'] || 1 }}</span>
                 }
               </div>
             </td>

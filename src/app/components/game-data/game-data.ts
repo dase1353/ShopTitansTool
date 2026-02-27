@@ -53,7 +53,8 @@ export class GameData implements OnInit {
 
     if (q) {
       result = result.filter(bp =>
-        (bp.Name && bp.Name.toLowerCase().includes(q))
+        (bp.Name && bp.Name.toLowerCase().includes(q)) ||
+        (bp.Name_tw && bp.Name_tw.toLowerCase().includes(q))
       );
     }
 
