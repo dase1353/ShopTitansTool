@@ -8,6 +8,7 @@ import { TalentEditorComponent } from '../talent-editor/talent-editor.component'
 import { DialogService } from '../../services/dialog.service';
 import { DialogComponent } from '../dialog/dialog.component';
 import { LucideAngularModule } from 'lucide-angular';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-talent-container',
@@ -17,7 +18,8 @@ import { LucideAngularModule } from 'lucide-angular';
     TalentTreeComponent,
     TalentEditorComponent,
     DialogComponent,
-    LucideAngularModule
+    LucideAngularModule,
+    TranslateModule
   ],
   template: `
     <div class="talent-container">
@@ -31,7 +33,7 @@ import { LucideAngularModule } from 'lucide-angular';
                   (click)="activeType.set(type)"
                 >
                   <img [src]="getTabIcon(type)" class="tab-icon" />
-                  <span>{{ getTranslation(type) }}</span>
+                  <span>{{ 'UI.TALENT_TAB.' + type.toUpperCase() | translate }}</span>
                   <div class="glow-effect" [class.show]="activeType() === type"></div>
                 </button>
               }
@@ -39,7 +41,7 @@ import { LucideAngularModule } from 'lucide-angular';
 
             <div class="stats-card glass-panel">
               <div class="stat-item">
-                <span class="label">成就</span>
+                <span class="label">{{ 'UI.TALENT_STATS.ACHIEVEMENTS' | translate }}</span>
                 <label class="switch">
                   <input 
                     type="checkbox" 
@@ -51,7 +53,7 @@ import { LucideAngularModule } from 'lucide-angular';
               </div>
               <div class="stat-divider"></div>
               <div class="stat-item">
-                <span class="label">可用點數</span>
+                <span class="label">{{ 'UI.TALENT_STATS.AVAILABLE_POINTS' | translate }}</span>
                 <div class="value-wrapper">
                   <img src="ShopTitansAssets/Currencies/icon_global_skillpoint.png" class="stat-icon" />
                   <span class="value remaining">{{ talentService.remainingPoints() }}</span>
@@ -59,7 +61,7 @@ import { LucideAngularModule } from 'lucide-angular';
               </div>
               <div class="stat-divider"></div>
               <div class="stat-item">
-                <span class="label">已配置</span>
+                <span class="label">{{ 'UI.TALENT_STATS.SPENT_POINTS' | translate }}</span>
                 <div class="value-wrapper">
                   <img src="ShopTitansAssets/Currencies/icon_global_skillpoint.png" class="stat-icon" />
                   <span class="value spent">{{ talentService.spentPoints() }}</span>
@@ -67,13 +69,13 @@ import { LucideAngularModule } from 'lucide-angular';
               </div>
               <div class="stat-item reset-item">
                 @if (talentService.spentPoints() > 0) {
-                  <button class="btn-profile" (click)="shareBuild()" title="分享流派">
+                  <button class="btn-profile" (click)="shareBuild()" [title]="'UI.TALENT_STATS.SHARE_BUILD' | translate">
                     <lucide-icon name="share-2" [size]="20" strokeWidth="2"></lucide-icon>
                   </button>
-                  <button class="btn-profile" (click)="isSaveLoadOpen.set(true)" title="存檔與讀取">
+                  <button class="btn-profile" (click)="isSaveLoadOpen.set(true)" [title]="'UI.TALENT_STATS.SAVE_LOAD' | translate">
                     <lucide-icon name="save" [size]="20" strokeWidth="2"></lucide-icon>
                   </button>
-                  <button class="btn-reset-all" (click)="resetAllPoints()">全部重設</button>
+                  <button class="btn-reset-all" (click)="resetAllPoints()">{{ 'UI.TALENT_STATS.RESET_ALL' | translate }}</button>
                 }
               </div>
             </div>
@@ -167,6 +169,8 @@ import { LucideAngularModule } from 'lucide-angular';
       display: flex;
       gap: 1rem;
       background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
       padding: 0.5rem;
       border-radius: 999px;
       border: 1px solid var(--border-glass);
@@ -623,15 +627,6 @@ export class TalentContainerComponent implements OnInit {
       // fallback alert with url inside
       await this.dialogService.alert('匯出成功：<br>' + this.talentService.exportBuildToUrl());
     }
-  }
-
-  getTranslation(type: TalentTreeType): string {
-    const translations: Record<TalentTreeType, string> = {
-      'Trading': '交易',
-      'Questing': '任務',
-      'Crafting': '製作'
-    };
-    return translations[type];
   }
 
   getTabIcon(type: TalentTreeType): string {

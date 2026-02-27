@@ -1,10 +1,11 @@
 import { Component, input, output, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TalentNode } from '../../models/talent.model';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-talent-node',
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   template: `
     <div 
       class="talent-node" 
@@ -35,7 +36,7 @@ import { TalentNode } from '../../models/talent.model';
         <div class="icon-frame"></div>
         <img [src]="node().icon" [alt]="" class="icon" />
 
-        <div class="name-bar">{{ node().name }}</div>
+        <div class="name-bar">{{ 'TALENT.' + node().id | translate }}</div>
 
         @if (node().maxLevel > 0) {
           <div class="level-badge" [class.max]="isMaxed()">

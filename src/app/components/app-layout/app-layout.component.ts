@@ -300,10 +300,13 @@ import { LucideAngularModule } from 'lucide-angular';
       }
 
       .mobile-header .app-title {
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
+        flex: 1;
+        text-align: center;
+        margin: 0 0.5rem;
         font-size: 1rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
       .desktop-only {

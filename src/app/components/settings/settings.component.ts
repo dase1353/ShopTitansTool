@@ -8,7 +8,7 @@ import { TalentService } from '../../services/talent.service';
     <div class="settings-panel glass-panel">
       <h2>系統設定</h2>
       <div class="setting-group">
-        <span class="setting-label">開啟開發者節點編輯器</span>
+        <span class="setting-label">talent editor 節點編輯器</span>
         <label class="switch">
           <input 
             type="checkbox" 

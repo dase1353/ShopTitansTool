@@ -11,11 +11,13 @@ import { QualityNamePipe } from '../../pipes/quality-name.pipe';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { TranslateModule } from '@ngx-translate/core';
+import { BlueprintCardComponent } from '../blueprint-card/blueprint-card.component';
 
 @Component({
   selector: 'app-game-data',
   standalone: true,
-  imports: [CommonModule, FormsModule, LucideAngularModule, ItemTypePipe, WorkerNamePipe, MaterialNamePipe, QualityNamePipe],
+  imports: [CommonModule, FormsModule, LucideAngularModule, ItemTypePipe, WorkerNamePipe, MaterialNamePipe, QualityNamePipe, TranslateModule, BlueprintCardComponent],
   providers: [
     { provide: 'LucideIcons', useValue: { Grid3X3, List } }
   ],
