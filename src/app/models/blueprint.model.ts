@@ -1,6 +1,8 @@
 export interface Blueprint {
     "uid": string;
     "Name_tw": string;
+    "Name_en": string;
+    "webtype": string;
     "Name": string;
     "Type": string;
     "UnlockPrerequisite": string | null;

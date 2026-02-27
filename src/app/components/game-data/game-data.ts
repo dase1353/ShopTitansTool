@@ -4,11 +4,12 @@ import { BlueprintService } from '../../services/blueprint.service';
 import { Blueprint } from '../../models/blueprint.model';
 import { FormsModule } from '@angular/forms';
 import { LucideAngularModule, Grid3X3, List } from 'lucide-angular';
+import { ItemTypePipe } from '../../pipes/item-type.pipe';
 
 @Component({
   selector: 'app-game-data',
   standalone: true,
-  imports: [CommonModule, FormsModule, LucideAngularModule],
+  imports: [CommonModule, FormsModule, LucideAngularModule, ItemTypePipe],
   providers: [
     { provide: 'LucideIcons', useValue: { Grid3X3, List } }
   ],
@@ -88,5 +89,9 @@ export class GameData implements OnInit {
     if (typeLower.includes('herb') || typeLower.includes('scroll')) return 'scroll';
     if (typeLower.includes('clothes') || typeLower.includes('shoes')) return 'shirt';
     return 'package'; // fallback icon
+  }
+
+  getItemImageUrl(uid: string): string {
+    return `https://playshoptitans.com/_next/image?url=%2Fassets%2Fitems%2F${uid}.png&w=256&q=50`;
   }
 }

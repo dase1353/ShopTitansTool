@@ -30,7 +30,7 @@
           <select [ngModel]="selectedType()" (ngModelChange)="selectedType.set($event)" class="glass-select">
             <option [ngValue]="null">所有類型</option>
             @for (type of availableTypes(); track type) {
-            <option [value]="type">{{ type }}</option>
+            <option [value]="type">{{ type | itemType }}</option>
             }
           </select>
         </div>
@@ -73,13 +73,13 @@
     <article class="bp-card glass-panel">
       <div class="bp-card-header">
         <div class="bp-icon-badge">
-          <lucide-icon [name]="getTypeIcon(bp.Type)" [size]="24"></lucide-icon>
+          <img [src]="getItemImageUrl(bp.uid)" [alt]="bp.Name_tw || bp.Name" class="bp-image" loading="lazy" />
         </div>
         <div class="bp-title-area">
           <h2 class="bp-name">{{ bp.Name_tw || bp.Name }}</h2>
           <div class="bp-badges">
             <span class="badge tier-badge">T{{ bp.Tier }}</span>
-            <span class="badge type-badge">{{ bp.Type }}</span>
+            <span class="badge type-badge">{{ bp.Type | itemType }}</span>
           </div>
         </div>
       </div>
@@ -229,12 +229,13 @@
             <td>
               <div class="td-equip">
                 <div class="td-name">
-                  <lucide-icon [name]="getTypeIcon(bp.Type)" [size]="20" class="td-icon"></lucide-icon>
+                  <img [src]="getItemImageUrl(bp.uid)" [alt]="bp.Name_tw || bp.Name" class="td-icon bp-image-small"
+                    loading="lazy" />
                   <strong>{{ bp.Name_tw || bp.Name }}</strong>
                 </div>
                 <div class="bp-badges">
                   <span class="badge tier-badge">T{{ bp.Tier }}</span>
-                  <span class="badge type-badge">{{ bp.Type }}</span>
+                  <span class="badge type-badge">{{ bp.Type | itemType }}</span>
                 </div>
               </div>
             </td>
