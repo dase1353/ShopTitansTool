@@ -340,8 +340,9 @@
 
 /* Stats */
 .bp-stats {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  row-gap: 0.75rem;
   background: rgba(0, 0, 0, 0.2);
   border-radius: 8px;
   padding: 0.75rem;
@@ -378,6 +379,14 @@
 
 .time-text {
   color: #94a3b8;
+}
+
+.exp-text {
+  color: #c4b5fd;
+}
+
+.merchant-exp-text {
+  color: #34d399;
 }
 
 .inline-icon {

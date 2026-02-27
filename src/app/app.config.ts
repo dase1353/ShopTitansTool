@@ -6,7 +6,7 @@ import { routes } from './app.routes';
 import {
     LucideAngularModule, Menu, Github, Globe, Settings, Database, HelpCircle, Search, Layers, Filter, Loader2, Ghost,
     Coins, Clock, Swords, Shield, Heart, Wind, Zap, Hammer, LayoutGrid, List,
-    FlaskConical, Gem, Crosshair, Wand, Scroll, Shirt, Package, Share2, Save, Edit2
+    FlaskConical, Gem, Crosshair, Wand, Scroll, Shirt, Package, Share2, Save, Edit2, Store
 } from 'lucide-angular';
 
 export const appConfig: ApplicationConfig = {
@@ -18,7 +18,7 @@ export const appConfig: ApplicationConfig = {
         importProvidersFrom(LucideAngularModule.pick({
             Menu, Github, Globe, Settings, Database, HelpCircle, Share2, Save, Edit2, Search, Layers, Filter, Loader2, Ghost,
             Coins, Clock, Swords, Shield, Heart, Wind, Zap, Hammer, LayoutGrid, List,
-            FlaskConical, Gem, Crosshair, Wand, Scroll, Shirt, Package
+            FlaskConical, Gem, Crosshair, Wand, Scroll, Shirt, Package, Store
         }))
     ]
 };

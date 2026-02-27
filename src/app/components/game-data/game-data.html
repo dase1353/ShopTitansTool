@@ -99,6 +99,20 @@
             {{ bp['CraftingTime(formatted)'] }}
           </div>
         </div>
+        <div class="stat-column">
+          <div class="stat-label">工人經驗</div>
+          <div class="stat-value exp-text">
+            <lucide-icon name="hammer" [size]="16" class="inline-icon"></lucide-icon>
+            {{ bp.WorkerXP | number }}
+          </div>
+        </div>
+        <div class="stat-column right-align">
+          <div class="stat-label">商人經驗</div>
+          <div class="stat-value merchant-exp-text">
+            <lucide-icon name="store" [size]="16" class="inline-icon"></lucide-icon>
+            {{ bp.MerchantXP | number }}
+          </div>
+        </div>
       </div>
 
       <div class="bp-divider"></div>
@@ -221,6 +235,7 @@
         <thead>
           <tr>
             <th>裝備</th>
+            <th>基本資訊</th>
             <th>素材需求</th>
             <th>特殊零件</th>
           </tr>
@@ -239,6 +254,18 @@
                   <span class="badge tier-badge">T{{ bp.Tier }}</span>
                   <span class="badge type-badge">{{ bp.Type | itemType }}</span>
                 </div>
+              </div>
+            </td>
+            <td>
+              <div class="td-stats">
+                <span class="gold-text" title="基礎價值"><lucide-icon name="coins" [size]="14"></lucide-icon> {{ bp.Value |
+                  number }}</span>
+                <span class="time-text" title="製作時間"><lucide-icon name="clock" [size]="14"></lucide-icon> {{
+                  bp['CraftingTime(formatted)'] }}</span>
+                <span class="exp-text" title="工人經驗"><lucide-icon name="hammer" [size]="14"></lucide-icon> {{ bp.WorkerXP
+                  | number }}</span>
+                <span class="merchant-exp-text" title="商人經驗"><lucide-icon name="store" [size]="14"></lucide-icon> {{
+                  bp.MerchantXP | number }}</span>
               </div>
             </td>
             <td>
