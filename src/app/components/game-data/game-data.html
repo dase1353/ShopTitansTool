@@ -151,20 +151,28 @@
         <!-- Resources -->
         <div class="req-title">製造素材</div>
         <div class="resources-list">
-          @if (bp.Iron !== '---' && bp.Iron !== null) { <span class="resource-tag iron">鐵 x{{ bp.Iron }}</span> }
-          @if (bp.Wood !== '---' && bp.Wood !== null) { <span class="resource-tag wood">木 x{{ bp.Wood }}</span> }
-          @if (bp.Leather !== '---' && bp.Leather !== null) { <span class="resource-tag leather">皮革 x{{ bp.Leather
-            }}</span> }
-          @if (bp.Herbs !== '---' && bp.Herbs !== null) { <span class="resource-tag herbs">草藥 x{{ bp.Herbs }}</span> }
-          @if (bp.Steel !== '---' && bp.Steel !== null) { <span class="resource-tag steel">鋼 x{{ bp.Steel }}</span> }
-          @if (bp.Ironwood !== '---' && bp.Ironwood !== null) { <span class="resource-tag ironwood">鐵木 x{{ bp.Ironwood
-            }}</span> }
-          @if (bp.Cloth !== '---' && bp.Cloth !== null) { <span class="resource-tag cloth">布料 x{{ bp.Cloth }}</span> }
-          @if (bp.Oil !== '---' && bp.Oil !== null) { <span class="resource-tag oil">油 x{{ bp.Oil }}</span> }
-          @if (bp.Gems !== '---' && bp.Gems !== null) { <span class="resource-tag gems">寶石 x{{ bp.Gems }}</span> }
-          @if (bp.Mana !== '---' && bp.Mana !== null) { <span class="resource-tag mana">乙太 x{{ bp.Mana }}</span> }
-          @if (bp.Essence !== '---' && bp.Essence !== null) { <span class="resource-tag essence">精華 x{{ bp.Essence
-            }}</span> }
+          @if (bp.Iron !== '---' && bp.Iron !== null) { <span class="resource-tag iron"><img
+              [src]="getResourceImageUrl('iron')" alt="鐵" class="resource-icon" /> x{{ bp.Iron }}</span> }
+          @if (bp.Wood !== '---' && bp.Wood !== null) { <span class="resource-tag wood"><img
+              [src]="getResourceImageUrl('wood')" alt="木" class="resource-icon" /> x{{ bp.Wood }}</span> }
+          @if (bp.Leather !== '---' && bp.Leather !== null) { <span class="resource-tag leather"><img
+              [src]="getResourceImageUrl('leather')" alt="皮" class="resource-icon" /> x{{ bp.Leather }}</span> }
+          @if (bp.Herbs !== '---' && bp.Herbs !== null) { <span class="resource-tag herbs"><img
+              [src]="getResourceImageUrl('herbs')" alt="草藥" class="resource-icon" /> x{{ bp.Herbs }}</span> }
+          @if (bp.Steel !== '---' && bp.Steel !== null) { <span class="resource-tag steel"><img
+              [src]="getResourceImageUrl('steel')" alt="鋼" class="resource-icon" /> x{{ bp.Steel }}</span> }
+          @if (bp.Ironwood !== '---' && bp.Ironwood !== null) { <span class="resource-tag ironwood"><img
+              [src]="getResourceImageUrl('ironwood')" alt="鐵木" class="resource-icon" /> x{{ bp.Ironwood }}</span> }
+          @if (bp.Cloth !== '---' && bp.Cloth !== null) { <span class="resource-tag cloth"><img
+              [src]="getResourceImageUrl('fabric')" alt="布料" class="resource-icon" /> x{{ bp.Cloth }}</span> }
+          @if (bp.Oil !== '---' && bp.Oil !== null) { <span class="resource-tag oil"><img
+              [src]="getResourceImageUrl('oils')" alt="油" class="resource-icon" /> x{{ bp.Oil }}</span> }
+          @if (bp.Gems !== '---' && bp.Gems !== null) { <span class="resource-tag gems"><img
+              [src]="getResourceImageUrl('gems')" alt="寶石" class="resource-icon" /> x{{ bp.Gems }}</span> }
+          @if (bp.Mana !== '---' && bp.Mana !== null) { <span class="resource-tag mana"><img
+              [src]="getResourceImageUrl('mana')" alt="乙太" class="resource-icon" /> x{{ bp.Mana }}</span> }
+          @if (bp.Essence !== '---' && bp.Essence !== null) { <span class="resource-tag essence"><img
+              [src]="getResourceImageUrl('essence')" alt="精華" class="resource-icon" /> x{{ bp.Essence }}</span> }
           @if (bp.Iron === '---' && bp.Wood === '---' && bp.Leather === '---' && bp.Herbs === '---' && bp.Steel ===
           '---' && bp.Ironwood === '---' && bp.Cloth === '---' && bp.Oil === '---' && bp.Gems === '---' && bp.Mana ===
           '---' && bp.Essence === '---') {
@@ -175,19 +183,32 @@
         <div class="req-title mt-2">特殊零件</div>
         <div class="components-list">
           @if (bp['Component'] !== '---' && bp['Component'] !== null) {
-          <span class="component-text">• {{ getComponentDisplayName(bp, 1) | materialName }} <span
-              class="component-amt">x{{
-              bp['AmountNeeded'] ||
-              1
-              }}</span>@if (bp['ComponentQuality'] !== '---') { <span class="quality-text">({{ bp['ComponentQuality'] |
-              qualityName }})</span> }</span>
+          <span class="component-text">
+            @if (!isEquipment(bp['ComponentQuality'])) {
+            <img [src]="getComponentImageUrl(bp['Component'])" [alt]="getComponentDisplayName(bp, 1)"
+              class="component-icon" />
+            }
+            <span class="component-name">{{ getComponentDisplayName(bp, 1) | materialName }}</span>
+            <span class="component-amt">x{{ bp['AmountNeeded'] || 1 }}</span>
+            @if (bp['ComponentQuality'] !== '---') {
+            <img [src]="getQualityImageUrl(bp['ComponentQuality'])" [alt]="bp['ComponentQuality']" class="quality-icon"
+              [title]="bp['ComponentQuality'] | qualityName" />
+            }
+          </span>
           }
           @if (bp['Component2'] !== '---' && bp['Component2'] !== null) {
-          <span class="component-text">• {{ getComponentDisplayName(bp, 2) | materialName }} <span
-              class="component-amt">x{{
-              bp['AmountNeeded2']
-              || 1 }}</span>@if (bp['ComponentQuality2'] !== '---') { <span class="quality-text">({{
-              bp['ComponentQuality2'] | qualityName }})</span> }</span>
+          <span class="component-text">
+            @if (!isEquipment(bp['ComponentQuality2'])) {
+            <img [src]="getComponentImageUrl(bp['Component2'])" [alt]="getComponentDisplayName(bp, 2)"
+              class="component-icon" />
+            }
+            <span class="component-name">{{ getComponentDisplayName(bp, 2) | materialName }}</span>
+            <span class="component-amt">x{{ bp['AmountNeeded2'] || 1 }}</span>
+            @if (bp['ComponentQuality2'] !== '---') {
+            <img [src]="getQualityImageUrl(bp['ComponentQuality2'])" [alt]="bp['ComponentQuality2']"
+              class="quality-icon" [title]="bp['ComponentQuality2'] | qualityName" />
+            }
+          </span>
           }
           @if ((bp['Component'] === '---' || bp['Component'] === null) && (bp['Component2'] === '---' ||
           bp['Component2'] === null)) {
@@ -274,32 +295,63 @@
             </td>
             <td>
               <div class="resources-list small">
-                @if (bp.Iron !== '---' && bp.Iron !== null) { <span class="resource-tag iron">鐵 {{ bp.Iron }}</span> }
-                @if (bp.Wood !== '---' && bp.Wood !== null) { <span class="resource-tag wood">木 {{ bp.Wood }}</span> }
-                @if (bp.Leather !== '---' && bp.Leather !== null) { <span class="resource-tag leather">皮 {{ bp.Leather
+                @if (bp.Iron !== '---' && bp.Iron !== null) { <span class="resource-tag iron"><img
+                    [src]="getResourceImageUrl('iron')" alt="鐵" class="resource-icon d-none" /> {{ bp.Iron }}</span> }
+                @if (bp.Wood !== '---' && bp.Wood !== null) { <span class="resource-tag wood"><img
+                    [src]="getResourceImageUrl('wood')" alt="木" class="resource-icon d-none" /> {{ bp.Wood }}</span> }
+                @if (bp.Leather !== '---' && bp.Leather !== null) { <span class="resource-tag leather"><img
+                    [src]="getResourceImageUrl('leather')" alt="皮" class="resource-icon d-none" /> {{ bp.Leather
                   }}</span> }
-                @if (bp.Herbs !== '---' && bp.Herbs !== null) { <span class="resource-tag herbs">草 {{ bp.Herbs }}</span>
+                @if (bp.Herbs !== '---' && bp.Herbs !== null) { <span class="resource-tag herbs"><img
+                    [src]="getResourceImageUrl('herbs')" alt="草" class="resource-icon d-none" /> {{ bp.Herbs }}</span> }
+                @if (bp.Steel !== '---' && bp.Steel !== null) { <span class="resource-tag steel"><img
+                    [src]="getResourceImageUrl('steel')" alt="鋼" class="resource-icon d-none" /> {{ bp.Steel }}</span> }
+                @if (bp.Ironwood !== '---' && bp.Ironwood !== null) { <span class="resource-tag ironwood"><img
+                    [src]="getResourceImageUrl('ironwood')" alt="鐵木" class="resource-icon d-none" /> {{ bp.Ironwood
+                  }}</span> }
+                @if (bp.Cloth !== '---' && bp.Cloth !== null) { <span class="resource-tag cloth"><img
+                    [src]="getResourceImageUrl('fabric')" alt="布" class="resource-icon d-none" /> {{ bp.Cloth }}</span>
                 }
-                @if (bp.Steel !== '---' && bp.Steel !== null) { <span class="resource-tag steel">鋼 {{ bp.Steel }}</span>
-                }
-                @if (bp.Ironwood !== '---' && bp.Ironwood !== null) { <span class="resource-tag ironwood">鐵木 {{
-                  bp.Ironwood }}</span> }
-                @if (bp.Cloth !== '---' && bp.Cloth !== null) { <span class="resource-tag cloth">布 {{ bp.Cloth }}</span>
-                }
-                @if (bp.Oil !== '---' && bp.Oil !== null) { <span class="resource-tag oil">油 {{ bp.Oil }}</span> }
-                @if (bp.Gems !== '---' && bp.Gems !== null) { <span class="resource-tag gems">寶石 {{ bp.Gems }}</span> }
-                @if (bp.Mana !== '---' && bp.Mana !== null) { <span class="resource-tag mana">乙太 {{ bp.Mana }}</span> }
-                @if (bp.Essence !== '---' && bp.Essence !== null) { <span class="resource-tag essence">精華 {{ bp.Essence
+                @if (bp.Oil !== '---' && bp.Oil !== null) { <span class="resource-tag oil"><img
+                    [src]="getResourceImageUrl('oils')" alt="油" class="resource-icon d-none" /> {{ bp.Oil }}</span> }
+                @if (bp.Gems !== '---' && bp.Gems !== null) { <span class="resource-tag gems"><img
+                    [src]="getResourceImageUrl('gems')" alt="寶石" class="resource-icon d-none" /> {{ bp.Gems }}</span> }
+                @if (bp.Mana !== '---' && bp.Mana !== null) { <span class="resource-tag mana"><img
+                    [src]="getResourceImageUrl('mana')" alt="乙太" class="resource-icon d-none" /> {{ bp.Mana }}</span> }
+                @if (bp.Essence !== '---' && bp.Essence !== null) { <span class="resource-tag essence"><img
+                    [src]="getResourceImageUrl('essence')" alt="精華" class="resource-icon d-none" /> {{ bp.Essence
                   }}</span> }
               </div>
             </td>
             <td>
               <div class="components-list small">
                 @if (bp['Component'] !== '---' && bp['Component'] !== null) {
-                <span>{{ getComponentDisplayName(bp, 1) | materialName }}x{{ bp['AmountNeeded'] || 1 }}</span>
+                <div class="component-badge">
+                  @if (!isEquipment(bp['ComponentQuality'])) {
+                  <img [src]="getComponentImageUrl(bp['Component'])" [alt]="getComponentDisplayName(bp, 1)"
+                    class="component-icon" />
+                  }
+                  <span class="component-name">{{ getComponentDisplayName(bp, 1) | materialName }}x{{ bp['AmountNeeded']
+                    || 1 }}</span>
+                  @if (bp['ComponentQuality'] !== '---') {
+                  <img [src]="getQualityImageUrl(bp['ComponentQuality'])" [alt]="bp['ComponentQuality']"
+                    class="quality-icon" [title]="bp['ComponentQuality'] | qualityName" />
+                  }
+                </div>
                 }
                 @if (bp['Component2'] !== '---' && bp['Component2'] !== null) {
-                <span>{{ getComponentDisplayName(bp, 2) | materialName }}x{{ bp['AmountNeeded2'] || 1 }}</span>
+                <div class="component-badge">
+                  @if (!isEquipment(bp['ComponentQuality2'])) {
+                  <img [src]="getComponentImageUrl(bp['Component2'])" [alt]="getComponentDisplayName(bp, 2)"
+                    class="component-icon" />
+                  }
+                  <span class="component-name">{{ getComponentDisplayName(bp, 2) | materialName }}x{{
+                    bp['AmountNeeded2'] || 1 }}</span>
+                  @if (bp['ComponentQuality2'] !== '---') {
+                  <img [src]="getQualityImageUrl(bp['ComponentQuality2'])" [alt]="bp['ComponentQuality2']"
+                    class="quality-icon" [title]="bp['ComponentQuality2'] | qualityName" />
+                  }
+                </div>
                 }
               </div>
             </td>

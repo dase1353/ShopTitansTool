@@ -64,7 +64,6 @@ export class MaterialNamePipe implements PipeTransform {
         'Opulent Jewel': '富足寶珠',
 
         'Deterioriated Book': '老舊書本',
-        'Deteriorated Book': '老舊書本',
         'Rusted Pickaxe': '生鏽鶴嘴鋤',
         'Faded Cowl': '褪色兜帽',
         'Tattered Binder': '破舊收藏冊',

@@ -1,0 +1,13 @@
+{
+    "UI": {
+        "APP_TITLE": "傳奇商店 / ShopTitans Tool",
+        "SEARCH": "搜尋",
+        "TALENT_TREE": "才華樹",
+        "GAME_DATA": "遊戲資料",
+        "SETTINGS": "設定",
+        "HELP": "使用教學",
+        "GITHUB": "GitHub 原始碼",
+        "WEBSITE": "官方網站",
+        "LANGUAGE": "切換語言"
+    }
+}

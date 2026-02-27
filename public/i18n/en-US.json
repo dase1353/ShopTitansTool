@@ -1,0 +1,13 @@
+{
+    "UI": {
+        "APP_TITLE": "ShopTitans Tool",
+        "SEARCH": "Search",
+        "TALENT_TREE": "Talent Tree",
+        "GAME_DATA": "Game Data",
+        "SETTINGS": "Settings",
+        "HELP": "Help",
+        "GITHUB": "GitHub Source",
+        "WEBSITE": "Official Website",
+        "LANGUAGE": "Switch Language"
+    }
+}

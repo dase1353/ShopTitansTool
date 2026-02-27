@@ -145,4 +145,23 @@ export class GameData implements OnInit {
   getItemImageUrl(uid: string): string {
     return `https://playshoptitans.com/_next/image?url=%2Fassets%2Fitems%2F${uid}.png&w=256&q=50`;
   }
+
+  getResourceImageUrl(resourceName: string): string {
+    return `ShopTitansAssets/Resources/icon_global_resource_${resourceName.toLowerCase()}.png`;
+  }
+
+  getComponentImageUrl(componentName: string): string {
+    const safeName = componentName.toLowerCase().replace(/\s+/g, '');
+    return `ShopTitansAssets/Components/${safeName}.png`;
+  }
+
+  getQualityImageUrl(qualityName: string): string {
+    return `ShopTitansAssets/Quality Indicators/icon_global_quality_${qualityName.toLowerCase()}.png`;
+  }
+
+  isEquipment(componentQuality: string | null | undefined): boolean {
+    // If it has a quality requirement that is not '---', it's equipment.
+    // Base game assets are treated as materials (no quality).
+    return !!componentQuality && componentQuality !== '---';
+  }
 }

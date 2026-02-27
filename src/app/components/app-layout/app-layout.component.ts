@@ -1,5 +1,6 @@
 import { Component, signal, inject } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
 import { DialogComponent } from '../dialog/dialog.component';
 import { DialogService } from '../../services/dialog.service';
@@ -15,7 +16,8 @@ import { LucideAngularModule } from 'lucide-angular';
     RouterLinkActive,
     CommonModule,
     DialogComponent,
-    LucideAngularModule
+    LucideAngularModule,
+    TranslateModule
   ],
   template: `
     <div class="app-layout">
@@ -24,15 +26,18 @@ import { LucideAngularModule } from 'lucide-angular';
         <button class="menu-toggle" (click)="toggleSidebar()">
           <lucide-icon name="menu" [size]="28" strokeWidth="2"></lucide-icon>
         </button>
-        <h3 class="app-title">ShopTitans Tool</h3>
+        <h3 class="app-title">{{ 'UI.APP_TITLE' | translate }}</h3>
         <div class="header-actions">
-          <button class="action-btn" (click)="showHelp()" title="使用教學">
+          <button class="action-btn" (click)="toggleLanguage()" [title]="'UI.LANGUAGE' | translate">
+            <lucide-icon name="languages" [size]="20" strokeWidth="2"></lucide-icon>
+          </button>
+          <button class="action-btn" (click)="showHelp()" [title]="'UI.HELP' | translate">
             <lucide-icon name="help-circle" [size]="20" strokeWidth="2"></lucide-icon>
           </button>
-          <a class="action-btn link-btn" href="https://github.com/dase1353/ShopTitansTool" target="_blank" title="GitHub 原始碼">
+          <a class="action-btn link-btn" href="https://github.com/dase1353/ShopTitansTool" target="_blank" [title]="'UI.GITHUB' | translate">
             <lucide-icon name="github" [size]="20" strokeWidth="2"></lucide-icon>
           </a>
-          <a class="action-btn link-btn" href="https://playshoptitans.com/zh-tw/store" target="_blank" title="官方網站">
+          <a class="action-btn link-btn" href="https://playshoptitans.com/zh-tw/store" target="_blank" [title]="'UI.WEBSITE' | translate">
             <lucide-icon name="globe" [size]="20" strokeWidth="2"></lucide-icon>
           </a>
         </div>
@@ -45,17 +50,17 @@ import { LucideAngularModule } from 'lucide-angular';
         </div>
 
         <nav class="nav-links">
-          <a class="tool-btn" routerLink="/talent" routerLinkActive="active" title="才華樹" (click)="closeSidebar()">
-            <img src="ShopTitansAssets/Misc Icons/icon_global_skilltree.png" class="menu-icon" alt="才華樹" />
+          <a class="tool-btn" routerLink="/talent" routerLinkActive="active" [title]="'UI.TALENT_TREE' | translate" (click)="closeSidebar()">
+            <img src="ShopTitansAssets/Misc Icons/icon_global_skilltree.png" class="menu-icon" [alt]="'UI.TALENT_TREE' | translate" />
           </a>
           
-          <a class="tool-btn" routerLink="/game-data" routerLinkActive="active" title="遊戲資料" (click)="closeSidebar()">
+          <a class="tool-btn" routerLink="/game-data" routerLinkActive="active" [title]="'UI.GAME_DATA' | translate" (click)="closeSidebar()">
             <lucide-icon name="database" [size]="28" strokeWidth="2" class="menu-icon"></lucide-icon>
           </a>
           
           <div class="menu-spacer"></div>
           
-          <a class="tool-btn" routerLink="/settings" routerLinkActive="active" title="設定" (click)="closeSidebar()">
+          <a class="tool-btn" routerLink="/settings" routerLinkActive="active" [title]="'UI.SETTINGS' | translate" (click)="closeSidebar()">
             <lucide-icon name="settings" [size]="28" strokeWidth="2" class="menu-icon"></lucide-icon>
           </a>
         </nav>
@@ -67,15 +72,18 @@ import { LucideAngularModule } from 'lucide-angular';
       <!-- Main Content Area -->
       <main class="main-content">
         <header class="content-header desktop-only">
-           <h3 class="app-title">傳奇商店 / ShopTitans Tool</h3>
+           <h3 class="app-title">{{ 'UI.APP_TITLE' | translate }}</h3>
            <div class="header-actions">
-            <button class="action-btn" (click)="showHelp()" title="使用教學">
+            <button class="action-btn" (click)="toggleLanguage()" [title]="'UI.LANGUAGE' | translate">
+              <lucide-icon name="languages" [size]="20" strokeWidth="2"></lucide-icon>
+            </button>
+            <button class="action-btn" (click)="showHelp()" [title]="'UI.HELP' | translate">
               <lucide-icon name="help-circle" [size]="20" strokeWidth="2"></lucide-icon>
             </button>
-            <a class="action-btn link-btn" href="https://github.com/dase1353/ShopTitansTool" target="_blank" title="GitHub 原始碼">
+            <a class="action-btn link-btn" href="https://github.com/dase1353/ShopTitansTool" target="_blank" [title]="'UI.GITHUB' | translate">
               <lucide-icon name="github" [size]="20" strokeWidth="2"></lucide-icon>
             </a>
-            <a class="action-btn link-btn" href="https://playshoptitans.com/zh-tw/store" target="_blank" title="官方網站">
+            <a class="action-btn link-btn" href="https://playshoptitans.com/zh-tw/store" target="_blank" [title]="'UI.WEBSITE' | translate">
               <lucide-icon name="globe" [size]="20" strokeWidth="2"></lucide-icon>
             </a>
            </div>
@@ -339,6 +347,7 @@ import { LucideAngularModule } from 'lucide-angular';
 export class AppLayoutComponent {
   isSidebarOpen = false;
   private dialog = inject(DialogService);
+  private translate = inject(TranslateService);
 
   toggleSidebar() {
     this.isSidebarOpen = !this.isSidebarOpen;
@@ -346,6 +355,13 @@ export class AppLayoutComponent {
 
   closeSidebar() {
     this.isSidebarOpen = false;
+  }
+
+  toggleLanguage() {
+    const currentLang = this.translate.currentLang;
+    const newLang = currentLang === 'zh-TW' ? 'en-US' : 'zh-TW';
+    this.translate.use(newLang);
+    localStorage.setItem('appLang', newLang);
   }
 
   showHelp() {
