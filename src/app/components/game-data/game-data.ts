@@ -5,6 +5,7 @@ import { Blueprint } from '../../models/blueprint.model';
 import { FormsModule } from '@angular/forms';
 import { LucideAngularModule, Grid3X3, List } from 'lucide-angular';
 import { ItemTypePipe } from '../../pipes/item-type.pipe';
+import { WorkerNamePipe } from '../../pipes/worker-name-pipe';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -12,7 +13,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 @Component({
   selector: 'app-game-data',
   standalone: true,
-  imports: [CommonModule, FormsModule, LucideAngularModule, ItemTypePipe],
+  imports: [CommonModule, FormsModule, LucideAngularModule, ItemTypePipe, WorkerNamePipe],
   providers: [
     { provide: 'LucideIcons', useValue: { Grid3X3, List } }
   ],

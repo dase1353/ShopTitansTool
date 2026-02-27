@@ -182,19 +182,19 @@
           @if (bp['RequiredWorker'] !== '---' && bp['RequiredWorker'] !== null) {
           <span class="worker-tag">
             <lucide-icon name="hammer" [size]="12"></lucide-icon>
-            {{ bp['RequiredWorker'] }} (Lv.{{ bp['WorkerLevel'] }})
+            {{ bp['RequiredWorker'] | workerName }} (Lv.{{ bp['WorkerLevel'] }})
           </span>
           }
           @if (bp['RequiredWorker2'] !== '---' && bp['RequiredWorker2'] !== null) {
           <span class="worker-tag">
             <lucide-icon name="hammer" [size]="12"></lucide-icon>
-            {{ bp['RequiredWorker2'] }} (Lv.{{ bp['WorkerLevel2'] }})
+            {{ bp['RequiredWorker2'] | workerName }} (Lv.{{ bp['WorkerLevel2'] }})
           </span>
           }
           @if (bp['RequiredWorker3'] !== '---' && bp['RequiredWorker3'] !== null) {
           <span class="worker-tag">
             <lucide-icon name="hammer" [size]="12"></lucide-icon>
-            {{ bp['RequiredWorker3'] }} (Lv.{{ bp['WorkerLevel3'] }})
+            {{ bp['RequiredWorker3'] | workerName }} (Lv.{{ bp['WorkerLevel3'] }})
           </span>
           }
         </div>
