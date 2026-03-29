@@ -864,7 +864,7 @@ export const CRAFTING_TALENTS: TalentNode[] = [
         "name": "塔瑪斯同盟",
         "defaultactive": false,
         "level": 0,
-        "maxLevel": 5,
+        "maxLevel": 3,
         "effect": [],
         "icon": "ShopTitansAssets/Talent Tree/icon_skilltree_t1Regen.png",
         "prerequisites": [
